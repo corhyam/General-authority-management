@@ -1,5 +1,7 @@
 package com.jier.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Role {
@@ -16,11 +18,12 @@ public class Role {
     private String delFlag;
 
     private String createBy;
-
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private String updateBy;
 
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private String remark;

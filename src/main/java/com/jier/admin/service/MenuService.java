@@ -21,9 +21,10 @@ import java.util.List;
  **/
 public interface MenuService {
     public List<LayUiTree> selectAllMenu();
+    public List<Menu> selectMenu();
     public boolean addMenu(Menu menu);
     public boolean updateMenu(Menu menu);
-
+    public boolean deleteMenuByIds(List<Integer> ids);
     public boolean deleteMenuById(Integer id);
     List<LayUiTree>  selectAllMenuByName(String loginName);
 }

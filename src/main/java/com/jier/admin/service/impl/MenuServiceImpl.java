@@ -21,6 +21,7 @@ import java.util.List;
  * @create: 2020-05-29 17:02
  **/
 @Service
+@Transactional
 public class MenuServiceImpl implements MenuService {
     @Resource
     MenuMapper menuMapper;
@@ -43,6 +44,11 @@ public class MenuServiceImpl implements MenuService {
         return TreeUtils.getChildPerms(menus, 0);
     }
 
+    @Override
+    public List<Menu> selectMenu() {
+        return menuMapper.selectByExample(null);
+    }
+
     public boolean addMenu(Menu menu){
         menu.setCreateTime(new Date());
         menu.setCreateBy("admin");
@@ -55,14 +61,23 @@ public class MenuServiceImpl implements MenuService {
         return true;
     }
     public boolean updateMenu(Menu menu){
-
+        menu.setUpdateTime(new Date());
         int i=menuMapper.updateByPrimaryKeySelective(menu);
         if(i!=1){
             return false;
         }
         return true;
     }
-    @Transactional
+
+    @Override
+    public boolean deleteMenuByIds(List<Integer> ids) {
+        MenuExample menuExample=new MenuExample();
+        MenuExample.Criteria criteria = menuExample.createCriteria();
+        criteria.andMenuIdIn(ids);
+        int i=menuMapper.deleteByExample(menuExample);
+        return false;
+    }
+
     public boolean deleteMenuById(Integer id){
         MenuExample menuExample=new MenuExample();
         MenuExample.Criteria criteria = menuExample.createCriteria();

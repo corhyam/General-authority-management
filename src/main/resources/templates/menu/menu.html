@@ -104,7 +104,6 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="formDemoEdit">立即提交</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
             </form>
@@ -180,7 +179,6 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
             </form>
@@ -367,7 +365,30 @@
 
             } else if (event === 'edit') {
                 layer.msg('修改成功');
+                layer.open({
+                        title: '添加菜单',
+                        /*如果是外部的html，type2，内部，type1*/
+                        type: 1,
+                        btnAlign: 'c',
+                        area: ['500px', '800px'],
+                        content: $("#edit-main").html()
+                        ,success: function(layero, index){
+                            //form.render();//渲染form
 
+                                var div = layero.find('#edit-permission');
+
+                                //div.find("#parentId1").val(data.menuId);
+                                //div.find("#parentName1").val(data.menuName);
+                                div.find("#menuName1").val(data.menuName);
+                                div.find("#url1").val(data.url);
+                                div.find("#perms1").val(data.perms);
+                                div.find("#icon1").val(data.icon);
+                                div.find("#orderNum1").val(data.orderNum);
+                                div.find("#remark1").val(data.remark);
+
+                    }
+                    }
+                );
                 obj.update({authorityName: '新的名称'});
             }
         });
@@ -428,7 +449,11 @@
                     });
                     var ids="";
                     map.map(function(el, index) {
-                        ids=ids+","+el.menuId;
+                        if(index==0){
+                            ids=el.menuId;
+                        }else{
+                            ids=ids+","+el.menuId;
+                        }
                     });
                     console.log(ids);
 

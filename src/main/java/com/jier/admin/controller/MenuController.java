@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -99,12 +100,8 @@ public class MenuController {
     }
     @DeleteMapping("/ids")
     public LayUITable delMenus(@RequestParam(value ="ids")Set<Integer> ids){
-        for (Integer id:ids
-             ) {
-            System.out.println(id);
-        }
-        boolean isDeleted = true;
-
+        List<Integer> list = new ArrayList<>(ids);
+        boolean isDeleted = menuService.deleteMenuByIds(list);
         if(isDeleted){
             return LayUITable.responseData(200,"success");
         }

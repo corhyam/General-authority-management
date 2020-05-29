@@ -75,7 +75,11 @@ public class MenuServiceImpl implements MenuService {
         MenuExample.Criteria criteria = menuExample.createCriteria();
         criteria.andMenuIdIn(ids);
         int i=menuMapper.deleteByExample(menuExample);
-        return false;
+        System.out.println(i);
+        if(i!=ids.size()){
+            throw  new RuntimeException("异常，未能全部删除，回滚");
+        }
+        return true;
     }
 
     public boolean deleteMenuById(Integer id){

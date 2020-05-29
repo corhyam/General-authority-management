@@ -11,9 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @program: admin
@@ -27,19 +26,37 @@ public class MenuController {
 
     @Resource
     MenuService menuService;
-
+    /** 
+    * @Description: 树状 
+    * @Param:  
+    * @return:  
+    * @Author: Mr.liu
+    * @Date: 2020/5/29 
+    */
     @GetMapping("/tree")
     public List<LayUiTree> selectAllMenuTree(){
         List<LayUiTree> menus = menuService.selectAllMenu();
         return menus;
     }
-    @Resource
-    MenuMapper menuMapper;
+    /** 
+    * @Description: 查询全部菜单 
+    * @Param:  
+    * @return:  
+    * @Author: Mr.liu
+    * @Date: 2020/5/29 
+    */
     @GetMapping("/select")
     public LayUITable selectAllMenu(){
-        List<Menu> menus = menuMapper.selectByExample(null);
+        List<Menu> menus = menuService.selectMenu();
         return LayUITable.responseData(0,"success",0,menus);
     }
+    /** 
+    * @Description: 添加菜单
+    * @Param:  
+    * @return:  
+    * @Author: Mr.liu
+    * @Date: 2020/5/29 
+    */
     @PostMapping("")
     public LayUITable addMenu(@Validated({AddMenu.class}) Menu menu){
         boolean isAdded = menuService.addMenu(menu);
@@ -48,6 +65,13 @@ public class MenuController {
         }
         return LayUITable.responseData(0,"failure");
     }
+    /**
+    * @Description: 更新菜单
+    * @Param:
+    * @return:
+    * @Author: Mr.liu
+    * @Date: 2020/5/29
+    */
     @PutMapping("")
     public LayUITable updateMenu(@Validated({UpdateMenu.class}) Menu menu){
         boolean isUpdated = menuService.updateMenu(menu);
@@ -56,10 +80,30 @@ public class MenuController {
         }
         return LayUITable.responseData(0,"failure");
     }
+    /**
+    * @Description: 删除菜单
+    * @Param:
+    * @return:
+    * @Author: Mr.liu
+    * @Date: 2020/5/29
+    */
     @DeleteMapping()
     public LayUITable delMenu(@RequestParam Integer id){
 
         boolean isDeleted = menuService.deleteMenuById(id);
+
+        if(isDeleted){
+            return LayUITable.responseData(200,"success");
+        }
+        return LayUITable.responseData(0,"failure");
+    }
+    @DeleteMapping("/ids")
+    public LayUITable delMenus(@RequestParam(value ="ids")Set<Integer> ids){
+        for (Integer id:ids
+             ) {
+            System.out.println(id);
+        }
+        boolean isDeleted = true;
 
         if(isDeleted){
             return LayUITable.responseData(200,"success");

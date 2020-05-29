@@ -103,7 +103,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                        <button class="layui-btn" lay-submit lay-filter="formDemoEdit">立即提交</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -231,7 +231,7 @@
 </div>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" lay-event="add">添加</a>
-<!--        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+        <a class="layui-btn layui-btn-xs" lay-event="del">批量删除</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="show">展开</a>
     </script>
 <!-- 表格操作列 -->
@@ -273,7 +273,7 @@
                 },
                 success: function (msg) {
                     console.log(msg);
-                    //insTb.refresh();
+                    insTb.refresh();
                     //location.reload();
                 }
 
@@ -348,7 +348,7 @@
                     $.ajax({
                         url: "/menu",
                         type: "DELETE",
-                        data: {'id': data.id},
+                        data: {'id': data.menuId},
                         success: function (msg) {
                             if (msg.code == 200) {
                                 //删除这一行
@@ -416,8 +416,44 @@
                     layer.msg('展开');
                     insTb.expandAll();
                     break;
-                case 'update':
-                    layer.msg('编辑');
+                case 'del':
+                    layer.msg('批量删除');
+                    var map=insTb.checkStatus(false).map(function (d) {
+                        return {
+
+                            'menuId': d.menuId,
+/*                            'menuName': d.menuName,
+                            'isSelected': d.LAY_INDETERMINATE*/
+                        };
+                    });
+                    var ids="";
+                    map.map(function(el, index) {
+                        ids=ids+","+el.menuId;
+                    });
+                    console.log(ids);
+
+                    layer.confirm('真的删除行么', function(index){
+                        $.ajax({
+                            url: "/menu/ids",
+                            type: "DELETE",
+                            data:{'ids':ids},
+                            //data: {'ids': arr},
+                            success: function (msg) {
+                                console.log(map);
+                                if (msg.code == 200) {
+                                    //删除这一行
+                                    obj.del();
+                                    //关闭弹框
+                                    layer.close(index);
+                                    layer.msg("删除成功", {icon: 6});
+                                } else {
+                                    layer.msg("删除失败", {icon: 5});
+                                }
+                            }
+                        });
+                        layer.close(index);
+                        //向服务端发送删除指令
+                    });
                     break;
                 case 'LAYTABLE_TIPS':
                     layer.msg('提示');

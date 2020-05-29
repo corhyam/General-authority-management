@@ -1,5 +1,6 @@
 package com.jier.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jier.admin.groupValidation.AddMenu;
 import com.jier.admin.groupValidation.UpdateMenu;
 
@@ -32,10 +33,13 @@ public class Menu {
     @Null(groups = {UpdateMenu.class})
     private String createBy;
     @Null(groups = {UpdateMenu.class})
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @Null(groups = {UpdateMenu.class})
     private String updateBy;
+
     @Null(groups = {UpdateMenu.class})
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private String remark;

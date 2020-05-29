@@ -1,32 +1,41 @@
 package com.jier.admin.entity;
 
+import com.jier.admin.groupValidation.AddMenu;
+import com.jier.admin.groupValidation.UpdateMenu;
+
 import java.util.Date;
+import javax.validation.constraints.*;
 
 public class Menu {
+
+    @NotNull(groups = {UpdateMenu.class},message = "id不能为空")
     private Integer menuId;
 
+    @NotEmpty(groups = {AddMenu.class},message = "菜单名不能为空")
     private String menuName;
 
+    @Null(groups = {UpdateMenu.class})
     private Integer parentId;
 
+    @NotNull(groups = {AddMenu.class},message = "菜单排序不能为空")
     private Integer orderNum;
-
+    @NotEmpty(groups = {AddMenu.class},message = "菜单路径url不能为空")
     private String url;
-
+    @NotEmpty(groups = {AddMenu.class},message = "菜单种类不能为空")
     private String menuType;
-
+    @NotEmpty(groups = {AddMenu.class},message = "是否可见属性不能为空")
     private String visible;
-
+    @NotEmpty(groups = {AddMenu.class},message = "权限标识不能为空")
     private String perms;
 
     private String icon;
-
+    @Null(groups = {UpdateMenu.class})
     private String createBy;
-
+    @Null(groups = {UpdateMenu.class})
     private Date createTime;
-
+    @Null(groups = {UpdateMenu.class})
     private String updateBy;
-
+    @Null(groups = {UpdateMenu.class})
     private Date updateTime;
 
     private String remark;

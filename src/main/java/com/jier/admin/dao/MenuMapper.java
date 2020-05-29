@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface MenuMapper {
+    List<Menu>  selectAllMenuByName(String loginName);
+
     long countByExample(MenuExample example);
 
     int deleteByExample(MenuExample example);

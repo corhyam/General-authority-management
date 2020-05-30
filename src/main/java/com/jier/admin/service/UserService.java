@@ -12,4 +12,5 @@ public interface UserService{
     PageInfo<User> selectAllUser(int page, int limit);
     int delUserByID(List<String> ids);
     int insertSelective(User record);
+    User selectUserByUsername(String username);
 }

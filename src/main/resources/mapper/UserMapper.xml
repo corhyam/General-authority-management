@@ -102,6 +102,18 @@
     from tbl_user
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
+
+    <select id="selectAllUser" resultMap="BaseResultMap">
+      select * from tbl_user
+  </select>
+    <delete id="delUserByID">
+        delete from tbl_user
+        where user_id in
+        <foreach collection="ids" item="xxx" open="(" close=")" separator=",">
+            #{xxx}
+        </foreach>
+    </delete>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tbl_user
     where user_id = #{userId,jdbcType=INTEGER}

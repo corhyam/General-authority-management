@@ -106,6 +106,9 @@
     <select id="selectAllUser" resultMap="BaseResultMap">
       select * from tbl_user
   </select>
+  <select id="selectUserByUsername" resultType="com.jier.admin.entity.User">
+        select * from tbl_user where login_name=#{loginName}
+    </select>
     <delete id="delUserByID">
         delete from tbl_user
         where user_id in

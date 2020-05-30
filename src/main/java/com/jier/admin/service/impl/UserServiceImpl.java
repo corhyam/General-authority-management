@@ -59,7 +59,12 @@ public class UserServiceImpl implements UserService{
             return userMapper.deleteByPrimaryKey(userId);
         }
 
-        @Override
+    @Override
+    public User selectUserByUsername(String username) {
+        return userMapper.selectUserByUsername(username);
+    }
+
+    @Override
         public int updateByPrimaryKeySelective(User record) {
             return userMapper.updateByPrimaryKeySelective(record);
         }

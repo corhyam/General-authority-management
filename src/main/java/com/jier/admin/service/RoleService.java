@@ -7,4 +7,5 @@ import java.util.List;
 public interface RoleService {
     List<Role> selectAllRole();
     int insertSelective(Role record);
+    int deleteById(List<Integer> ids);
 }

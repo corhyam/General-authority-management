@@ -17,6 +17,8 @@ public interface RoleMapper {
 
     int deleteByPrimaryKey(Integer roleId);
 
+    int updatedeleteById(@Param("ids") List<Integer> ids);
+
     int insert(Role record);
 
     int insertSelective(Role record);

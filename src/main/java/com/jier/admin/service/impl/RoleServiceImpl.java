@@ -22,4 +22,9 @@ public class RoleServiceImpl implements RoleService {
 
         return roleMapper.insertSelective(record);
     }
+
+    @Override
+    public int deleteById(List<Integer> ids) {
+        return roleMapper.updatedeleteById(ids);
+    }
 }

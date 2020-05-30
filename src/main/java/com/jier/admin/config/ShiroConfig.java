@@ -1,5 +1,7 @@
 package com.jier.admin.config;
 
+import com.jier.admin.dao.MenuMapper;
+import com.jier.admin.entity.Menu;
 import com.jier.admin.util.MyConstants;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -9,8 +11,10 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,7 +25,8 @@ import java.util.Map;
  **/
 @Configuration
 public class ShiroConfig {
-
+    @Resource
+    MenuMapper menuMapper;
 
     @Bean
     public ShiroFilterFactoryBean getShiroFilterFactoryBean(){
@@ -33,6 +38,16 @@ public class ShiroConfig {
         filterMap.put("/*","authc");
         filterMap.put("/login","anon");
         filterMap.put("/query","perms[my-user:add]");
+        //自定义加载权限资源关系
+
+        List<Menu> resourcesList =menuMapper.selectByExample(null);
+        for(Menu menu:resourcesList){
+
+            if (!menu.equals("#")) {
+                String permission = "perms[" + menu.getPerms()+ "]";
+                filterMap.put(menu.getUrl(),permission);
+            }
+        }
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         //设置跳转登陆页面
         shiroFilterFactoryBean.setLoginUrl("/login");

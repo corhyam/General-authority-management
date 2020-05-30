@@ -31,5 +31,7 @@ public interface UserMapper {
 
     List<User> selectAllUser();
 
+    User selectUserByUsername(String username);
+
     int delUserByID(List<String> ids);
 }

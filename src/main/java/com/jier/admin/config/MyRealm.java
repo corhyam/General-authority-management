@@ -1,5 +1,7 @@
 package com.jier.admin.config;
 
+import com.jier.admin.entity.User;
+import com.jier.admin.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -7,6 +9,8 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
 ;
 
 /**
@@ -17,6 +21,8 @@ import org.apache.shiro.subject.Subject;
  **/
 
 public class MyRealm extends AuthorizingRealm {
+    @Autowired
+    private UserService userService;
 
     //授权
     @Override
@@ -35,27 +41,27 @@ public class MyRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         System.out.println("执行认证");
         //获取当前用户
-
         UsernamePasswordToken usernamePasswordToken= (UsernamePasswordToken) authenticationToken;
-        //数据库连接查询
-        String name="admin";
-        String password="123";
-      /*  UserInfoExample userInfoExample=new UserInfoExample();
-        UserInfoExample.Criteria criteria = userInfoExample.createCriteria();
-        criteria.andUsernameEqualTo(usernamePasswordToken.getUsername());
-        List<UserInfo> userInfos = userInfoMapper.selectByExample(userInfoExample);
-
-        if(userInfos==null||userInfos.size()==0){
+        //登录验证分两个步骤，步骤一查询用户是否存在
+        String username=usernamePasswordToken.getUsername();
+        User userInfo = userService.selectUserByUsername(username);
+        if(null==userInfo){
             return null;
         }
-        UserInfo userInfo=userInfos.get(0);
-        if (!usernamePasswordToken.getUsername().equals(userInfo.getUsername())){
-            return null;
-        }*/
-        if (!usernamePasswordToken.getUsername().equals(name)){
-            return null;
-        }
-        return new SimpleAuthenticationInfo("",password,"");
+        //步骤二，查询密码是否正确
+        //数据库中的密码
+        String password=userInfo.getPassword();
+        //Object principal, Object credentials, String realmName
+        /**
+         *  * @param principal         the 'primary' principal associated with the specified realm.
+         *      * @param hashedCredentials the hashed credentials that verify the given principal.
+         *      * @param credentialsSalt   the salt used when hashing the given hashedCredentials
+         *      * @param realmName         the realm from where the principal and credentials were acquired.
+         */
+        String salt = userInfo.getSalt();
+        ByteSource byteSource=ByteSource.Util.bytes(salt);
+        SimpleAuthenticationInfo simpleAuthenticationInfo= new SimpleAuthenticationInfo(userInfo,password,byteSource,getName());
+        return simpleAuthenticationInfo;
     }
 
 }

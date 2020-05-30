@@ -81,6 +81,22 @@ public class MenuController {
         }
         return LayUITable.responseData(0,"failure");
     }
+    /** 
+    * @Description: 批量删除菜单 
+    * @Param:  
+    * @return:  
+    * @Author: Mr.liu
+    * @Date: 2020/5/30 
+    */
+    @DeleteMapping("/ids")
+    public LayUITable delMenus(@RequestParam(value ="ids")Set<Integer> ids){
+        List<Integer> list = new ArrayList<>(ids);
+        boolean isDeleted = menuService.deleteMenuByIds(list);
+        if(isDeleted){
+            return LayUITable.responseData(200,"success");
+        }
+        return LayUITable.responseData(0,"failure");
+    }
     /**
     * @Description: 删除菜单
     * @Param:
@@ -98,13 +114,5 @@ public class MenuController {
         }
         return LayUITable.responseData(0,"failure");
     }
-    @DeleteMapping("/ids")
-    public LayUITable delMenus(@RequestParam(value ="ids")Set<Integer> ids){
-        List<Integer> list = new ArrayList<>(ids);
-        boolean isDeleted = menuService.deleteMenuByIds(list);
-        if(isDeleted){
-            return LayUITable.responseData(200,"success");
-        }
-        return LayUITable.responseData(0,"failure");
-    }
+   
 }

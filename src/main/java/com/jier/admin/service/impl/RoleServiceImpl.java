@@ -16,4 +16,10 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> selectAllRole() {
         return roleMapper.selectAllRole();
     }
+
+    @Override
+    public int insertSelective(Role record) {
+
+        return roleMapper.insertSelective(record);
+    }
 }

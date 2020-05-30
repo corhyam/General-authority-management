@@ -10,29 +10,35 @@
 <body>
 <table id="demo" lay-filter="test"></table>
 <script type="text/html" id="mytoolbar">
-    <button type="button" class="layui-btn layui-btn-sm" lay-event="saveUser"><i class="layui-icon layui-icon-addition"></i>添加</button>
+    <button type="button" class="layui-btn layui-btn-sm" lay-event="saveRole"><i class="layui-icon layui-icon-addition"></i>添加</button>
     <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delUser"><i class="layui-icon layui-icon-delete"></i>删除</button>
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn  layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
 </script>
-<form class="layui-form" action="" id="userSaveForm" style="display: none">
+<form class="layui-form" action="" id="roleSaveForm" style="display: none">
     <div class="layui-form-item">
-        <label class="layui-form-label">用户名</label>
+        <label class="layui-form-label">角色名</label>
         <div class="layui-input-block">
-            <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <input type="text" name="roleName" required  lay-verify="required" placeholder="请输入角色名" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">密  码</label>
+        <label class="layui-form-label">权限字符</label>
         <div class="layui-input-block">
-            <input type="text" name="password" required  lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            <input type="text" name="roleKey" required  lay-verify="required" placeholder="请输入权限字符" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">显示顺序</label>
+        <div class="layui-input-block">
+            <input type="text" name="roleSort" required  lay-verify="required" placeholder="请输入显示顺序" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button type="button"  	class="layui-btn layui-btn-normal" lay-submit lay-filter="saveUserForm">保存</button>
+            <button type="button"  	class="layui-btn layui-btn-normal" lay-submit lay-filter="saveRoleForm">保存</button>
             <button type="reset"  	class="layui-btn layui-btn-warm">重置</button>
         </div>
     </div>
@@ -82,13 +88,13 @@
             ,data = checkStatus.data; //获取选中的数据
         var ids=[];
         switch(obj.event){
-            case 'saveUser':
+            case 'saveRole':
                 layer.open(
                     {
                         type: 1,
-                        content: $("#userSaveForm"),
+                        content: $("#roleSaveForm"),
                         icon: 1,
-                        title:"添加用户",
+                        title:"添加角色",
                         area: ['450px', '200px']
                     }
                 )
@@ -141,16 +147,17 @@
         };
     });
     //监听提交
-    form.on('submit(saveUserForm)', function(data){
+    form.on('submit(saveRoleForm)', function(data){
         //数据的提交，ajax方式
         console.log(data.field)
         $.ajax({
-            url: 'saveUser',//地址
+            url: 'saveRole',//地址
             dataType: 'json',//数据类型
             type: 'POST',//类型
             data:data.field,
             //请求成功
             success: function (result) {
+                console.log(result);
                 if(result.code==0){
                     //关闭弹出层
                     layer.closeAll();

@@ -1,5 +1,6 @@
 package com.jier.admin.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.jier.admin.entity.LayUITable;
 import com.jier.admin.entity.Role;
 import com.jier.admin.service.RoleService;
@@ -7,6 +8,7 @@ import com.jier.admin.util.MyConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -36,7 +38,7 @@ public class RoleController {
     }
     @RequestMapping("/saveRole")
     @ResponseBody
-    public String saveRole(String roleName,String roleKey,Integer roleSort,String status){
+    public Object saveRole(String roleName,String roleKey,Integer roleSort,String status){
         Role role=new Role();
         role.setRoleName(roleName);
         role.setRoleKey(roleKey);
@@ -48,12 +50,32 @@ public class RoleController {
         Map map = new LinkedHashMap();
         if(i>0){
 
-            map.put("code", MyConstants.saveSuccessMsg);
+            map.put("code", MyConstants.successCode);
+            map.put("message",MyConstants.saveSuccessMsg);
         }else{
-            map.put("code", MyConstants.saveFailMsg);
+            map.put("code", MyConstants.failCode);
+            map.put("message",MyConstants.saveFailMsg);
         }
 
-        return map.toString();
+        return map;
 
     }
+    @RequestMapping("/delRole")
+    @ResponseBody
+    public Object delRole(@RequestParam(value = "ids")String ids){
+        List<Integer> list = (List<Integer>) JSON.parse(ids);
+        int i = roleServiceImpl.deleteById(list);
+        Map map = new LinkedHashMap();
+        if(i>0){
+
+            map.put("code", MyConstants.successCode);
+            map.put("message",MyConstants.delSuccessMsg);
+        }else{
+            map.put("code", MyConstants.failCode);
+            map.put("message",MyConstants.delFailMsg);
+        }
+
+        return map;
+    }
+
 }

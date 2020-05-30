@@ -94,7 +94,7 @@ WHERE
 			tbl_user u
 		INNER JOIN tbl_users_roles ur ON ur.user_id = u.user_id
 		WHERE
-			u.login_name = 'admin'
+			u.login_name =#{loginName}
 	)
 ) k where k.visible!=1
 

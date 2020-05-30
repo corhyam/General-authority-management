@@ -80,7 +80,8 @@
     create_time, update_by, update_time, remark
   </sql>
   <select id="selectAllMenuByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-      SELECT
+
+	 select   k.* from (SELECT
 	m.*
 FROM
 	tbl_menu m
@@ -93,8 +94,9 @@ WHERE
 			tbl_user u
 		INNER JOIN tbl_users_roles ur ON ur.user_id = u.user_id
 		WHERE
-			u.login_name = #{loginName}
+			u.login_name = 'admin'
 	)
+) k where k.visible!=1
 
     </select>
   <select id="selectByExample" parameterType="com.jier.admin.entity.MenuExample" resultMap="BaseResultMap">

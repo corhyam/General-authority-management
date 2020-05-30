@@ -109,8 +109,8 @@
     <delete id="delUserByID">
         delete from tbl_user
         where user_id in
-        <foreach collection="ids" item="xxx" open="(" close=")" separator=",">
-            #{xxx}
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id, jdbcType=INTEGER}
         </foreach>
     </delete>
 

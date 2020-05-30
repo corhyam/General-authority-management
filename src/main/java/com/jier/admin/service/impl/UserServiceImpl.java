@@ -1,17 +1,16 @@
 package com.jier.admin.service.impl;
 
-import com.jier.admin.service.UserService;
-import com.jier.admin.dao.UserMapper;
-import com.jier.admin.entity.User;
-//import com.jier.admin.shiro.ShiroUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.jier.admin.dao.UserMapper;
+import com.jier.admin.entity.User;
+import com.jier.admin.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.UUID;
+
+//import com.jier.admin.shiro.ShiroUtil;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -50,14 +49,19 @@ public class UserServiceImpl implements UserService{
             return userMapper.delUserByID(ids);
         }
 
-    @Override
-    public int insertSelective(User record) {
-        return userMapper.insertSelective(record);
-    }
+        @Override
+        public int insertSelective(User record) {
+            return userMapper.insertSelective(record);
+        }
 
-/*        @Override
+        @Override
+        public int deleteByPrimaryKey(Integer userId) {
+            return userMapper.deleteByPrimaryKey(userId);
+        }
+
+        @Override
         public int updateByPrimaryKeySelective(User record) {
             return userMapper.updateByPrimaryKeySelective(record);
-        }*/
+        }
 
 }

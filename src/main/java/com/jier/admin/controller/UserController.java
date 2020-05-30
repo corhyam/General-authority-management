@@ -1,11 +1,11 @@
 package com.jier.admin.controller;
 
-import com.jier.admin.service.UserService;
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageInfo;
 import com.jier.admin.entity.LayUITable;
 import com.jier.admin.entity.User;
+import com.jier.admin.service.UserService;
 import com.jier.admin.util.MyConstants;
-import com.github.pagehelper.PageInfo;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,10 +55,14 @@ public class UserController {
         return map;
     }
 
-/*    @RequestMapping("/editUser")
+    @RequestMapping("/edit")
     @ResponseBody
-    public Object editUser(User userInfo){
-        int i = userServiceImpl.updateByPrimaryKeySelective(userInfo);
+    public Object editUser(User user){
+        User user1 = new User();
+        System.out.println(user);
+        user1.setUserName("xiaopag");
+        user1.setUserId(5);
+        int i = userServiceImpl.updateByPrimaryKeySelective(user);
         Map map= new HashMap<>();
         if(i>0){
             map.put("code",MyConstants.successCode);
@@ -67,14 +71,16 @@ public class UserController {
             map.put("code",MyConstants.failCode);
             map.put("message",MyConstants.editFailMsg);
         }
+        System.out.println(map);
         return map;
-    }*/
+    }
+
     @RequestMapping("/delUser")
     @ResponseBody
     public Object delUser( @RequestParam(value = "ids") String  ids){
-        System.out.println(ids);
         //将json字符串转换成list对象
         List<String> list= (List<String>) JSON.parse(ids);
+        System.out.println(list);
         int i = userServiceImpl.delUserByID(list);
         Map map= new HashMap<>();
         if(i>0){
@@ -87,5 +93,20 @@ public class UserController {
         return map;
     }
 
+    @RequestMapping("/del")
+    @ResponseBody
+    public Object delUser( @RequestParam(value = "userId") Integer  userId){
+        System.out.println(userId);
+        int i = userServiceImpl.deleteByPrimaryKey(userId);
+        Map map= new HashMap<>();
+        if(i>0){
+            map.put("code",MyConstants.successCode);
+            map.put("message",MyConstants.delSuccessMsg);
+        }else {
+            map.put("code",MyConstants.failCode);
+            map.put("message",MyConstants.delFailMsg);
+        }
+        return map;
+    }
 
 }

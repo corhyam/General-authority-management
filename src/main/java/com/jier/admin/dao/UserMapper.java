@@ -2,8 +2,9 @@ package com.jier.admin.dao;
 
 import com.jier.admin.entity.User;
 import com.jier.admin.entity.UserExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface UserMapper {
     long countByExample(UserExample example);

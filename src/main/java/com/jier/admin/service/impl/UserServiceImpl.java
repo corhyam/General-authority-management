@@ -2,6 +2,7 @@ package com.jier.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jier.admin.config.ShiroUtil;
 import com.jier.admin.dao.UserMapper;
 import com.jier.admin.entity.User;
 import com.jier.admin.service.UserService;
@@ -9,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-
-//import com.jier.admin.shiro.ShiroUtil;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService{
             return userMapper.selectUserByUsername(username);
         }*/
 
-       /* @Override
+        @Override
         public int insertSelective(User record) {
             //次处要进行密码加盐加密
             String salt = UUID.randomUUID().toString();
@@ -41,17 +41,17 @@ public class UserServiceImpl implements UserService{
             record.setPassword(encryption);
             record.setSalt(salt);
             return userMapper.insertSelective(record);
-        }*/
+        }
 
         @Override
         public int delUserByID(List<String> ids) {
             return userMapper.delUserByID(ids);
         }
 
-        @Override
+/*        @Override
         public int insertSelective(User record) {
             return userMapper.insertSelective(record);
-        }
+        }*/
 
         @Override
         public int deleteByPrimaryKey(Integer userId) {

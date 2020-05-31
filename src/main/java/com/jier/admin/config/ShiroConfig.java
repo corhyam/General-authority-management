@@ -35,9 +35,9 @@ public class ShiroConfig {
 
         shiroFilterFactoryBean.setSecurityManager(getDefaultWebSecurityManager());
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/*","authc");
+
         filterMap.put("/login","anon");
-        filterMap.put("/query","perms[my-user:add]");
+
         //自定义加载权限资源关系
 
         List<Menu> resourcesList =menuMapper.selectByExample(null);
@@ -48,6 +48,7 @@ public class ShiroConfig {
                 filterMap.put(menu.getUrl(),permission);
             }
         }
+        filterMap.put("/*","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         //设置跳转登陆页面
         shiroFilterFactoryBean.setLoginUrl("/login");

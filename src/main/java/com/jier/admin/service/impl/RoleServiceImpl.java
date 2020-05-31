@@ -27,4 +27,7 @@ public class RoleServiceImpl implements RoleService {
     public int deleteById(List<Integer> ids) {
         return roleMapper.updatedeleteById(ids);
     }
+    public int updateByPrimaryKeySelective(Role record){
+        return roleMapper.updateByPrimaryKeySelective(record);
+    }
 }

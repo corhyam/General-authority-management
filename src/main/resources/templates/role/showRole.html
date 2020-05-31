@@ -10,12 +10,12 @@
 <body>
 <table id="demo" lay-filter="test"></table>
 <script type="text/html" id="mytoolbar">
-    <button type="button" class="layui-btn layui-btn-sm" lay-event="saveRole"><i class="layui-icon layui-icon-addition"></i>添加</button>
-    <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delRole"><i class="layui-icon layui-icon-delete"></i>删除</button>
+    <button type="button" class="layui-btn layui-btn-radius" lay-event="saveRole"><i class="layui-icon layui-icon-addition"></i>添加</button>
+    <button type="button" class="layui-btn layui-btn-radius layui-btn-danger" lay-event="delRole"><i class="layui-icon layui-icon-delete"></i>删除</button>
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn  layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn  layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
 </script>
 <form class="layui-form" action="" id="roleSaveForm" style="display: none">
     <div class="layui-form-item">
@@ -37,6 +37,12 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <input type="text" name="remark" required  lay-verify="required" placeholder="请输入备注信息" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <div class="layui-input-block">
             <button type="button"  	class="layui-btn layui-btn-normal" lay-submit lay-filter="saveRoleForm">保存</button>
             <button type="reset"  	class="layui-btn layui-btn-warm">重置</button>
@@ -44,20 +50,40 @@
     </div>
 
 </form>
-<form class="layui-form" action="" id="userEditForm" style="display: none">
-    <input type="hidden" id="userid" name="userid" >
-    <div class="layui-form-item">
-        <label class="layui-form-label">用户名</label>
-        <div class="layui-input-block">
-            <input type="text" id="username" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+<form class="layui-form" action="" id="roleEditForm" style="display: none">
+    <input type="hidden" id="roleId" name="roleId">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名</label>
+            <div class="layui-input-block">
+                <input type="text" id="roleName" name="roleName" required  lay-verify="required" placeholder="请输入角色名" autocomplete="off" class="layui-input">
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button type="button"  	class="layui-btn layui-btn-normal" lay-submit lay-filter="editUserForm">修改</button>
-            <button type="reset"  	class="layui-btn layui-btn-warm">重置</button>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限字符</label>
+            <div class="layui-input-block">
+                <input type="text" id="roleKey" name="roleKey" required  lay-verify="required" placeholder="请输入权限字符" autocomplete="off" class="layui-input">
+            </div>
         </div>
-    </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">显示顺序</label>
+            <div class="layui-input-block">
+                <input type="text" id="roleSort" name="roleSort" required  lay-verify="required" placeholder="请输入显示顺序" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" id="remark" name="remark" required  lay-verify="required" placeholder="请输入备注信息" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button"  	class="layui-btn layui-btn-normal" lay-submit lay-filter="editRoleForm">修改</button>
+                <button type="reset"  	class="layui-btn layui-btn-warm">重置</button>
+            </div>
+        </div>
+
+
 
 </form>
 </body>
@@ -76,9 +102,12 @@
                 {field: 'roleId', title: '角色编号', width:80, sort: true, fixed: 'left',checkbox: true}
                 ,{field: 'roleName', title: '角色名称', width:120, sort: true, fixed: 'left'}
                 ,{field: 'roleKey', title: '权限字符', width:120}
-                ,{field: 'roleSort', title: '显示顺序', width:180}
-                ,{field: 'status', title: '状态', width:50}
+                ,{field: 'roleSort', title: '显示顺序',sort: true, width:180}
+                ,{field: 'status', title: '状态',
+                templet: '<p><button type="button" id="zt" class="layui-btn layui-btn-sm layui-btn-normal">{{d.status==0?"正常":"异常"}}</button></p>',width:80}
+                ,{field: 'remark', title: '备注信息', width:200}
                 ,{field: 'createTime', title: '创建时间', width:200}
+                ,{field: 'updateTime', title: '修改时间', width:200}
                 ,{ title: '操作', width:200, toolbar: '#barDemo'}
             ]]
     });
@@ -175,11 +204,11 @@
         });
         return false;
     });
-    form.on('submit(editUserForm)', function(data){
+    form.on('submit(editRoleForm)', function(data){
         //数据的提交，ajax方式
         console.log(data.field)
         $.ajax({
-            url: 'editUser',//地址
+            url: 'editRole',//地址
             dataType: 'json',//数据类型
             type: 'POST',//类型
             data:data.field,
@@ -218,15 +247,18 @@
             layer.msg('编辑操作');
             //填充修改用户的表单项
             console.log(data);
-            $("#username").val(data.username);
-            $("#userid").val(data.userid);
+            $("#roleId").val(data.roleId);
+            $("#roleName").val(data.roleName);
+            $("#remark").val(data.remark);
+            $("#roleKey").val(data.roleKey);
+            $("#roleSort").val(data.roleSort);
             layer.open(
                 {
                     type: 1,
-                    content: $("#userEditForm"),
+                    content: $("#roleEditForm"),
                     icon: 1,
                     title:"修改用户",
-                    area: ['450px', '200px']
+                    area: ['450px', '300px']
                 }
             )
         }

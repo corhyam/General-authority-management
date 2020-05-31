@@ -309,7 +309,8 @@
     where role_id = #{roleId,jdbcType=INTEGER}
   </update>
   <update id="updatedeleteById">
-          update tbl_role set del_flag=1
+          update tbl_role set
+          del_flag=1
           where role_id in
           <foreach collection="ids" item="xxx" open="(" close=")" separator=",">
             #{xxx}

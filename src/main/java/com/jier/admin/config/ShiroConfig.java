@@ -37,7 +37,10 @@ public class ShiroConfig {
         Map<String, String> filterMap = new LinkedHashMap<>();
 
         filterMap.put("/login","anon");
-
+        filterMap.put("/css/**","anon");
+        filterMap.put("/img/**","anon");
+        filterMap.put("/js/**","anon");
+        filterMap.put("/layui/**","anon");
         //自定义加载权限资源关系
 
         List<Menu> resourcesList =menuMapper.selectByExample(null);
@@ -48,7 +51,7 @@ public class ShiroConfig {
                 filterMap.put(menu.getUrl(),permission);
             }
         }
-        filterMap.put("/**","authc");
+
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         //设置跳转登陆页面
         shiroFilterFactoryBean.setLoginUrl("/login");

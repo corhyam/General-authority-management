@@ -34,7 +34,10 @@ public class ShiroService {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
         filterChainDefinitionMap.put("/login","anon");
-
+        filterChainDefinitionMap.put("/css/**","anon");
+        filterChainDefinitionMap.put("/img/**","anon");
+        filterChainDefinitionMap.put("/js/**","anon");
+        filterChainDefinitionMap.put("/layui/**","anon");
         List<Menu> resourcesList =menuMapper.selectByExample(null);
         for(Menu menu:resourcesList){
 
@@ -43,7 +46,7 @@ public class ShiroService {
                 filterChainDefinitionMap.put(menu.getUrl(),permission);
             }
         }
-        filterChainDefinitionMap.put("/**", "authc");
+
         return filterChainDefinitionMap;
     }
     /**
@@ -71,6 +74,7 @@ public class ShiroService {
             manager.getFilterChains().clear();
 
             shiroFilterFactoryBean.getFilterChainDefinitionMap().clear();
+
             shiroFilterFactoryBean
                     .setFilterChainDefinitionMap(loadFilterChainDefinitions());
             // 重新构建生成

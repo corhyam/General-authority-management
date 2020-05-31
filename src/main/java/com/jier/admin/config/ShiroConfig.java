@@ -48,7 +48,7 @@ public class ShiroConfig {
                 filterMap.put(menu.getUrl(),permission);
             }
         }
-        filterMap.put("/*","authc");
+        filterMap.put("/**","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         //设置跳转登陆页面
         shiroFilterFactoryBean.setLoginUrl("/login");

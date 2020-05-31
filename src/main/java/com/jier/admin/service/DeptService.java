@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.jier.admin.dao.DeptMapper;
 import com.jier.admin.entity.Dept;
 import com.jier.admin.entity.DeptExample;
+import com.jier.admin.entity.Role;
 import com.jier.admin.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +21,10 @@ import java.util.List;
 
 @Service
 public interface DeptService{
-    public List<Dept> selectAllDept();
-    public boolean addDept(Dept dept);
-    public boolean updateDept(Dept dept);
-    public boolean deleteDeptByIds(List<Integer> ids);
-    public boolean deleteDeptById(Integer id);
+     List<Dept> selectAllDept();
+    int insertSelective(Dept record);
+    int deleteById(List<Integer> ids);
+    int updateByPrimaryKeySelective(Dept record);
+    int deleteByPrimaryKey(Integer deptId);
 
 }

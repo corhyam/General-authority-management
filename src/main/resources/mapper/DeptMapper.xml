@@ -174,7 +174,7 @@
     </if>
   </select>
   <select id="selectAllDept" resultMap="BaseResultMap">
-      select * from tbl_dept
+      select * from tbl_dept where del_flag=0
   </select>
   <update id="updateByExampleSelective" parameterType="map">
     update tbl_dept
@@ -267,5 +267,13 @@
       update_by = #{updateBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where dept_id = #{deptId,jdbcType=INTEGER}
+  </update>
+  <update id="updateDeleteById">
+    update tbl_dept set
+    del_flag=1
+    where dept_id in
+    <foreach collection="ids" item="xxx" open="(" close=")" separator=",">
+      #{xxx}
+    </foreach>
   </update>
 </mapper>

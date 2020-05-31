@@ -34,4 +34,6 @@ public interface DeptMapper {
     int updateByPrimaryKey(Dept record);
 
     List<Dept> selectAllDept();
+
+    int updateDeleteById(@Param("ids") List<Integer> ids);
 }

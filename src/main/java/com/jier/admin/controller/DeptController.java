@@ -6,24 +6,26 @@ package com.jier.admin.controller;
  * @date 2020/5/31 12:40
  */
 
+import com.alibaba.fastjson.JSON;
 import com.jier.admin.entity.Dept;
 import com.jier.admin.entity.LayUITable;
+import com.jier.admin.entity.User;
 import com.jier.admin.service.DeptService;
+import com.jier.admin.util.MyConstants;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Controller
 @RequestMapping("/dept")
 public class DeptController {
-    @Resource
+    @Autowired
     DeptService deptService;
 
     @RequestMapping("/toShowDept")
@@ -42,48 +44,84 @@ public class DeptController {
         return layUITable;
     }
 
+    @RequestMapping("/saveDept")
+    @ResponseBody
+    public Object savedept(Integer deptId,String deptName,Integer orderNum,String status,String deptFlag){
 
-    @GetMapping("")
-    public LayUITable selectAllMenu(){
-        List<Dept> depts = deptService.selectAllDept();
-        return LayUITable.responseData(0,"success",0,depts);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Dept dept=new Dept();
+        dept.setDeptId(deptId);
+        dept.setDeptName(deptName);
+        dept.setOrderNum(orderNum);
+        dept.setStatus(status);
+        dept.setDelFlag(deptFlag);
+        dept.setCreateBy(user.getLoginName());
+        dept.setCreateTime(new Date());
+        if (status==null)
+            status = "0";
+        dept.setStatus(status);
+        user=null;
+        int i = deptService.insertSelective(dept);
+        Map map = new LinkedHashMap();
+        if(i>0){
+
+            map.put("code", MyConstants.successCode);
+            map.put("message",MyConstants.saveSuccessMsg);
+        }else{
+            map.put("code", MyConstants.failCode);
+            map.put("message",MyConstants.saveFailMsg);
+        }
+
+        return map;
+
+    }
+    @RequestMapping("/delDept")
+    @ResponseBody
+    public Object delRole(@RequestParam(value = "ids")String ids){
+        List<Integer> list = (List<Integer>) JSON.parse(ids);
+        int i = deptService.deleteById(list);
+        Map map = new LinkedHashMap();
+        if(i>0){
+
+            map.put("code", MyConstants.successCode);
+            map.put("message",MyConstants.delSuccessMsg);
+        }else{
+            map.put("code", MyConstants.failCode);
+            map.put("message",MyConstants.delFailMsg);
+        }
+
+        return map;
     }
 
-    @PostMapping("")
-    public LayUITable addMenu(Dept dept){
-        boolean isAdded = deptService.addDept(dept);
-        if(isAdded){
-            return LayUITable.responseData(200,"success");
-        }
-        return LayUITable.responseData(0,"failure");
-    }
+    @RequestMapping("/editDept")
+    @ResponseBody
+    public Object editdept(Integer deptId,String deptName,Integer orderNum,String status,String deptFlag){
 
-    @PutMapping("")
-    public LayUITable updateMenu( Dept dept){
-        boolean isUpdated =deptService.updateDept(dept);
-        if(isUpdated){
-            return LayUITable.responseData(200,"success");
-        }
-        return LayUITable.responseData(0,"failure");
-    }
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Dept dept=new Dept();
+        dept.setDeptId(deptId);
+        dept.setDeptName(deptName);
+        dept.setOrderNum(orderNum);
+        dept.setStatus(status);
+        dept.setDelFlag(deptFlag);
+        dept.setUpdateBy(user.getLoginName());
+        dept.setUpdateTime(new Date());
+        if (status==null)
+            status = "0";
+        dept.setStatus(status);
+        user=null;
+        int i = deptService.updateByPrimaryKeySelective(dept);
+        Map map = new LinkedHashMap();
+        if(i>0){
 
-    @DeleteMapping()
-    public LayUITable delMenu(@RequestParam Integer id){
-
-        boolean isDeleted = deptService.deleteDeptById(id);
-
-        if(isDeleted){
-            return LayUITable.responseData(200,"success");
+            map.put("code", MyConstants.successCode);
+            map.put("message",MyConstants.editSuccessMsg);
+        }else{
+            map.put("code", MyConstants.failCode);
+            map.put("message",MyConstants.editFailMsg);
         }
-        return LayUITable.responseData(0,"failure");
-    }
-    @DeleteMapping("/ids")
-    public LayUITable delMenus(@RequestParam(value ="ids") Set<Integer> ids){
-        List<Integer> list = new ArrayList<>(ids);
-        boolean isDeleted = deptService.deleteDeptByIds(list);
-        if(isDeleted){
-            return LayUITable.responseData(200,"success");
-        }
-        return LayUITable.responseData(0,"failure");
+
+        return map;
+
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PageController {
     @GetMapping("/index")
     public String index(){
-        return "/index";
+        return "index";
     }
     @GetMapping("/login")
     public String login(){
@@ -21,19 +21,11 @@ public class PageController {
     }
     @GetMapping("/menu")
     public String menu2(){
-        return "/menu/menu";
+        return "menu/menu";
     }
-    @GetMapping("/menuTree")
-    public String menuTree(){
-        return "/menu/showMenuTree";
+    @GetMapping("/show")
+    public String show(){
+        return "show";
     }
 
-    @GetMapping("/showMenuTree2")
-    public String menuTree2(){
-        return "/menu/showMenuTree2";
-    }
-    @GetMapping("/showMenu")
-    public String menushow(){
-        return "/menu/showMenu";
-    }
 }

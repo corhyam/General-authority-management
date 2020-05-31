@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Service
 public class DeptServiceImpl implements DeptService {
-    @Resource
+    @Autowired
     DeptMapper deptMapper;
     @Override
     public List<Dept> selectAllDept() {
@@ -28,50 +28,23 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public boolean addDept(Dept dept) {
-        dept.setCreateTime(new Date());
-        dept.setCreateBy("admin");
-        dept.setUpdateBy("admin");
-        dept.setUpdateTime(new Date());
-        int i=deptMapper.insert(dept);
-        if(i!=1){
-            return false;
-        }
-        return true;
+    public int insertSelective(Dept record) {
+        return deptMapper.insertSelective(record);
     }
 
     @Override
-    public boolean updateDept(Dept dept) {
-        dept.setUpdateTime(new Date());
-        int i=deptMapper.updateByPrimaryKeySelective(dept);
-        if(i!=1){
-            return false;
-        }
-        return true;
+    public int deleteById(List<Integer> ids) {
+        return deptMapper.updateDeleteById(ids);
     }
 
     @Override
-    public boolean deleteDeptByIds(List<Integer> ids) {
-        DeptExample deptExample=new DeptExample();
-        DeptExample.Criteria criteria = deptExample.createCriteria();
-        criteria.andDeptIdIn(ids);
-        int i=deptMapper.deleteByExample(deptExample);
-        System.out.println(i);
-        if(i!=ids.size()){
-            throw  new RuntimeException("异常，未能全部删除，回滚");
-        }
-        return true;
+    public int updateByPrimaryKeySelective(Dept record) {
+        return deptMapper.updateByPrimaryKeySelective(record);
     }
 
     @Override
-    public boolean deleteDeptById(Integer id) {
-        DeptExample deptExample=new DeptExample();
-        DeptExample.Criteria criteria = deptExample.createCriteria();
-        criteria.andDeptIdEqualTo(id);
-        int i=deptMapper.deleteByExample(deptExample);
-        if(i!=1){
-            return false;
-        }
-        return true;
+    public int deleteByPrimaryKey(Integer deptId) {
+        return deptMapper.deleteByPrimaryKey(deptId);
     }
+
 }

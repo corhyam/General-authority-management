@@ -1,600 +1,666 @@
 <!DOCTYPE html >
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script th:src="@{/js/jquery-1.10.2.js}"></script>
-    <script th:src="@{/layui/layui.all.js}"></script>
-    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
-    <style>
-        .demo-side {
-            position: relative;
-            transition: all .3s;
-        }
-
-        .demo-side.show {
-            padding-left: 120px;
-            position: relative;
-        }
-
-        .demo-side:before {
-            content: "假设这是侧边栏, treeTable使用了与layui数据表格完全不同的列宽分配方式, 由浏览器来分配, 所以当容器宽度变化后会自动适应, 对单页面系统非常友好";
-            position: absolute;
-            left: 0;
-            top: 50%;
-            margin-top: -90px;
-            width: 105px;
-            visibility: hidden;
-            line-height: 1.5;
-        }
-
-        .demo-side.show:before {
-            visibility: visible;
-        }
-    </style>
-</head>
-<body>
-    <div id="edit-main" style="display: none;" >
-        <div class="my-form" id="edit-permission">
-            <form class="layui-form" action="">
-                <input type="hidden"id="menuId1" name="menuId1" required >
-                <div class="layui-form-item">
-                    <label class="layui-form-label">菜单类型</label>
-                    <div class="layui-input-block">
-                        <input type="radio" id="menuTypeM1" name="menuType1" value="M" title="目录">
-                        <input type="radio" id="menuTypeC1" name="menuType1" value="C" title="菜单">
-                        <input type="radio" id="menuTypeF1" name="menuType1" value="F" title="按钮">
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">菜单名</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="menuName1" name="menuName1" required  lay-verify="required" placeholder="菜单名" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">请求地址url</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="url1" name="url1" required  lay-verify="required" placeholder="请求地址url" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">权限标识</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="perms1" name="perms1" required  lay-verify="required" placeholder="权限标识" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">显示排序</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id ="orderNum1" name="orderNum1" required  lay-verify="required" placeholder="显示排序" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">图标</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="icon1" name="icon1" required  lay-verify="required" placeholder="图标" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">是否显示</label>
-                    <div class="layui-input-block">
-                        <input type="radio" id="visible1" name="visible1" value="0" title="显示">
-                        <input type="radio" id="visible2" name="visible1" value="1" title="隐藏">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">备注</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="remark1" name="remark1" required  placeholder="备注" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="formDemoEdit">立即提交</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div id="add-main" style="display: none;" >
-        <div class="my-form" id="permission">
-            <form class="layui-form" action="">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">上级菜单ID</label>
-                    <div class="layui-input-inline">
-                        <input type="text"id="parentId" name="parentId" required readonly="readonly"   placeholder="菜单名" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">上级菜单</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="parentName" name="parentName" required readonly="readonly"   placeholder="菜单名" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">菜单类型</label>
-                    <div class="layui-input-block">
-                        <input type="radio" id="menuTypeM" name="menuType" value="M" title="目录">
-                        <input type="radio" id="menuTypeC" name="menuType" value="C" title="菜单">
-                        <input type="radio" id="menuTypeF" name="menuType" value="F" title="按钮">
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">菜单名</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="menuName" name="menuName" required  lay-verify="required" placeholder="菜单名" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">请求地址url</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="url" name="url" required  lay-verify="required" placeholder="请求地址url" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">权限标识</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="perms" name="perms" required  lay-verify="required" placeholder="权限标识" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">显示排序</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id ="orderNum" name="orderNum" required  lay-verify="required" placeholder="显示排序" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">图标</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="icon" name="icon" required value="#" lay-verify="required" placeholder="默认无为#" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">是否显示</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="visible" value="0" title="显示" checked>
-                        <input type="radio" name="visible" value="1" title="隐藏">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">备注</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="remark" name="remark" required  lay-verify="required" placeholder="备注" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-<div class="page-wrapper">
-
-    <div class="layui-btn-container" style="display: inline-block;">
-        <button id="btnReload" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#xe666;</i>重载
-        </button>
-        <button id="btnRefresh" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#xe669;</i>刷新
-        </button>
-<!--        <button id="btnGetChecked" class="layui-btn layui-btn-sm layui-btn-primary">获取选中</button>
-        <button id="btnToggleSide" class="layui-btn layui-btn-sm layui-btn-primary">演示侧边栏</button>-->
-    </div>
-    <div class="layui-btn-container" style="display: inline-block;">
-        <button id="btnExpandAll" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#xe668;</i>展开全部
-        </button>
-        <button id="btnFoldAll" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#xe66b;</i>折叠全部
-        </button>
-<!--        <button id="btnExpand" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#xe625;</i>展开用户管理
-        </button>
-        <button id="btnFold" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#xe623;</i>折叠用户管理
-        </button>-->
-<!--        <button id="btnChecked" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#xe605;</i>勾选添加用户
-        </button>-->
-    </div>
-    <input class="layui-input" id="edtSearch" value="" placeholder="输入关键字"
-           style="display: inline-block;width: 140px;height: 30px;line-height: 30px;padding: 0 5px;margin-right: 5px;"/>
-    <div class="layui-btn-container" style="display: inline-block;">
-        <button id="btnSearch" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#xe615;</i>搜索
-        </button>
-        <button id="btnClearSearch" class="layui-btn layui-btn-sm layui-btn-primary">
-            <i class="layui-icon">&#x1006;</i>清除搜索
-        </button>
-    </div>
-    <div class="demo-side">
-        <table id="demoTreeTb"></table>
-    </div>
-</div>
-    <script type="text/html" id="barDemo">
-        <button type="button" class="layui-btn layui-btn-radius" lay-event="add">添加(可使用勾选框先选择父菜单项)</button>
-        <button type="button" class="layui-btn layui-btn-radius" lay-event="del">批量删除</button>
-        <button type="button" class="layui-btn layui-btn-radius" lay-event="show">展开</button>
-<!--        <a class="layui-btn layui-btn-xs" lay-event="add">添加</a>
-        <a class="layui-btn layui-btn-xs" lay-event="del">批量删除</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="show">展开</a>-->
-    </script>
-<!-- 表格操作列 -->
-<script type="text/html" id="tbBar">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script>
-
-<script>
-    layui.config({
-        base: '/layui/lay/modules/'      //自定义layui组件的目录
-    }).extend({ //设定组件别名
-        treeTable:   'treeTable',
-    });
-    layui.use(['layer', 'util', 'treeTable','form'], function () {
-        var form = layui.form;
-        form.render();//渲染form
-        var $ = layui.jquery;
-        var layer = layui.layer;
-        var util = layui.util;
-        var treeTable = layui.treeTable;
-        $('body').removeClass('layui-hide');
-
-        form.on('submit(formDemo)', function(data){
-            //layer.msg(JSON.stringify(data.field));
-            $.ajax({
-                url: "/menu/add",
-                type: "POST",
-                data: {
-                    'parentId': data.field.parentId,
-                    'menuName':data.field.menuName,
-                    'menuType':data.field.menuType,
-                    'url':data.field.url,
-                    'visible':data.field.visible,
-                    'orderNum':data.field.orderNum,
-                    'icon':data.field.icon,
-                    'perms':data.field.perms,
-                    'remark':data.field.remark,
-                },
-                success: function (msg) {
-                    console.log(msg);
-                    if(msg.code==200){
-                        layer.msg("成功添加");
-                    }else{
-                        layer.msg(msg.msg);
-                    }
-
-                    insTb.refresh();
-                    //location.reload();
-                }
-
-            });
-            return false;
-        });
-        form.on('submit(formDemoEdit)', function(data){
-            //layer.msg(JSON.stringify(data.field));
-            $.ajax({
-                url: "/menu/edit",
-                type: "PUT",
-                data: {
-                    'menuId': data.field.menuId1,
-                    'menuName':data.field.menuName1,
-                    'menuType':data.field.menuType1,
-                    'url':data.field.url1,
-                    'visible':data.field.visible1,
-                    'orderNum':data.field.orderNum1,
-                    'icon':data.field.icon1,
-                    'perms':data.field.perms1,
-                    'remark':data.field.remark1,
-                },
-                success: function (msg) {
-                    console.log(msg);
-                    if(msg.code==200){
-                        layer.msg("成功修改");
-                    }else{
-                        layer.msg(msg.msg);
-                    }
-
-                    insTb.refresh();
-                    //location.reload();
-                }
-
-            });
-            return false;
-        });
-        // 渲染表格
-        var insTb = treeTable.render({
-            elem: '#demoTreeTb',
-            url: 'menu/select',
-            toolbar: '#barDemo',
-            height: 'full-100',
-            tree: {
-                iconIndex: 2,
-                isPidData: true,
-                idName: 'menuId',
-                pidName: 'parentId',
-            },
-            defaultToolbar: ['filter', 'print', 'exports', {
-                title: '提示',
-                layEvent: 'LAYTABLE_TIPS',
-                icon: 'layui-icon-tips'
-            }],
-            cols: [
-               /* [
-                    {title: '只是想演示一个三级表头', colspan: 9},
-                ],
-                [
-                    {title: '只是想演示一个多级表头', colspan: 4},
-                    {field: 'menuUrl', title: '菜单地址', rowspan: 2},
-                    {title: '这是一个二级表头', colspan: 4}
-                ],*/
-                [
-                    {type: 'numbers'},
-                    {type: 'checkbox'},
-                    {field: 'menuName', title: '菜单名称', minWidth: 165},
-                    {
-                        title: '菜单图标', align: 'center', hide: false,
-                        templet: '<p><i class="layui-icon {{d.icon}}"></i></p>'
-                    },
-                    {field: 'url', title: '权限url'},
-                    {field: 'perms', title: '权限标识'},
-                    {title: '类型', templet: '<p><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">{{d.menuType=="C"?"菜单":(d.menuType=="M"?"目录":"按钮")}}</button></p>', align: 'center', width: 60},
-                    {title: '可见', templet: '<p> <button type="button" class="layui-btn layui-btn-sm">{{d.visible=="0"?"显示":"隐藏"}}</button></p>', align: 'center', width: 60},
-                    {//{{d.menuType=="C"?"菜单":"按钮"}}
-                        title: '创建时间', templet: function (d) {
-                            return util.toDateString(d.createTime);
-                        }
-                    },
-                    {
-                        title: '更新时间', templet: function (d) {
-                            return util.toDateString(d.updateTime);
-                        }
-                    },
-                    {field: 'createBy', title: '创建者'},
-                    {field: 'remark', title: '备注'},
-                    {align: 'center', toolbar: '#tbBar', title: '操作', width: 120}
-                ]
-            ],
-            style: 'margin-top:0;',
-            done:function(result){
-                insTb.expandAll();
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script th:src="@{/js/jquery-1.10.2.js}"></script>
+        <script th:src="@{/layui/layui.all.js}"></script>
+        <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+        <style>
+            .demo-side {
+                position: relative;
+                transition: all .3s;
             }
-        });
 
-        // 工具列点击事件
-        treeTable.on('tool(demoTreeTb)', function (obj) {
-            var data = obj.data; //获得当前行数据
-            var event = obj.event;
-            if (event === 'del') {
+            .demo-side.show {
+                padding-left: 120px;
+                position: relative;
+            }
 
-                layer.confirm('真的删除行么', function(index){
-                    $.ajax({
-                        url: "/menu/id",
-                        type: "DELETE",
-                        data: {'id': data.menuId},
-                        success: function (msg) {
-                            if (msg.code == 200) {
-                                //删除这一行
-                                obj.del();
-                                //关闭弹框
-                                layer.close(index);
-                                layer.msg("删除成功", {icon: 6});
-                            } else {
-                                layer.msg("删除失败"+msg.msg, {icon: 5});
-                            }
+            .demo-side:before {
+                content: "假设这是侧边栏, treeTable使用了与layui数据表格完全不同的列宽分配方式, 由浏览器来分配, 所以当容器宽度变化后会自动适应, 对单页面系统非常友好";
+                position: absolute;
+                left: 0;
+                top: 50%;
+                margin-top: -90px;
+                width: 105px;
+                visibility: hidden;
+                line-height: 1.5;
+            }
+
+            .demo-side.show:before {
+                visibility: visible;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="edit-main" style="display: none;" >
+            <div class="my-form" id="edit-permission">
+                <form class="layui-form" action="">
+                    <input type="hidden"id="menuId1" name="menuId1" required >
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜单类型</label>
+                        <div class="layui-input-block">
+                            <input type="radio" id="menuTypeM1" name="menuType1" value="M" title="目录">
+                            <input type="radio" id="menuTypeC1" name="menuType1" value="C" title="菜单">
+                            <input type="radio" id="menuTypeF1" name="menuType1" value="F" title="按钮">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜单名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="menuName1" name="menuName1" required  lay-verify="required" placeholder="菜单名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请求地址url</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="url1" name="url1" required  lay-verify="required" placeholder="请求地址url" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">权限标识</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="perms1" name="perms1" required  lay-verify="required" placeholder="权限标识" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">显示排序</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id ="orderNum1" name="orderNum1" required  lay-verify="required" placeholder="显示排序" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">图标</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="icon1" name="icon1" required  lay-verify="required" placeholder="图标" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否显示</label>
+                        <div class="layui-input-block">
+                            <input type="radio" id="visible1" name="visible1" value="0" title="显示">
+                            <input type="radio" id="visible2" name="visible1" value="1" title="隐藏">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="remark1" name="remark1" required  placeholder="备注" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemoEdit">立即提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="add-main" style="display: none;" >
+            <div class="my-form" id="permission">
+
+                <form class="layui-form" action="">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">上级菜单ID</label>
+                        <div class="layui-input-inline">
+                            <input type="text"id="parentId" name="parentId" required readonly="readonly"   placeholder="菜单名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">上级菜单</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="parentName" name="parentName" required readonly="readonly"   placeholder="菜单名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">选择上级菜单</label>
+                        <div class="layui-input-inline">
+                            <input type="text"id="tree" lay-filter="tree" required   placeholder="菜单名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜单类型</label>
+                        <div class="layui-input-block">
+                            <input type="radio" id="menuTypeM" name="menuType" value="M" title="目录">
+                            <input type="radio" id="menuTypeC" name="menuType" value="C" title="菜单">
+                            <input type="radio" id="menuTypeF" name="menuType" value="F" title="按钮">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜单名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="menuName" name="menuName" required  lay-verify="required" placeholder="菜单名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请求地址url</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="url" name="url" required  lay-verify="required" placeholder="请求地址url" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">权限标识</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="perms" name="perms" required  lay-verify="required" placeholder="权限标识" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">显示排序</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id ="orderNum" name="orderNum" required  lay-verify="required" placeholder="显示排序" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">图标</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="icon" name="icon" required value="#" lay-verify="required" placeholder="默认无为#" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否显示</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="visible" value="0" title="显示" checked>
+                            <input type="radio" name="visible" value="1" title="隐藏">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="remark" name="remark" required  lay-verify="required" placeholder="备注" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="page-wrapper">
+
+            <div class="layui-btn-container" style="display: inline-block;">
+                <button id="btnReload" class="layui-btn layui-btn-sm layui-btn-primary">
+                    <i class="layui-icon">&#xe666;</i>重载
+                </button>
+                <button id="btnRefresh" class="layui-btn layui-btn-sm layui-btn-primary">
+                    <i class="layui-icon">&#xe669;</i>刷新
+                </button>
+                <!--        <button id="btnGetChecked" class="layui-btn layui-btn-sm layui-btn-primary">获取选中</button>
+                        <button id="btnToggleSide" class="layui-btn layui-btn-sm layui-btn-primary">演示侧边栏</button>-->
+            </div>
+            <div class="layui-btn-container" style="display: inline-block;">
+                <button id="btnExpandAll" class="layui-btn layui-btn-sm layui-btn-primary">
+                    <i class="layui-icon">&#xe668;</i>展开全部
+                </button>
+                <button id="btnFoldAll" class="layui-btn layui-btn-sm layui-btn-primary">
+                    <i class="layui-icon">&#xe66b;</i>折叠全部
+                </button>
+                <!--        <button id="btnExpand" class="layui-btn layui-btn-sm layui-btn-primary">
+                            <i class="layui-icon">&#xe625;</i>展开用户管理
+                        </button>
+                        <button id="btnFold" class="layui-btn layui-btn-sm layui-btn-primary">
+                            <i class="layui-icon">&#xe623;</i>折叠用户管理
+                        </button>-->
+                <!--        <button id="btnChecked" class="layui-btn layui-btn-sm layui-btn-primary">
+                            <i class="layui-icon">&#xe605;</i>勾选添加用户
+                        </button>-->
+            </div>
+            <input class="layui-input" id="edtSearch" value="" placeholder="输入关键字"
+                   style="display: inline-block;width: 140px;height: 30px;line-height: 30px;padding: 0 5px;margin-right: 5px;"/>
+            <div class="layui-btn-container" style="display: inline-block;">
+                <button id="btnSearch" class="layui-btn layui-btn-sm layui-btn-primary">
+                    <i class="layui-icon">&#xe615;</i>搜索
+                </button>
+                <button id="btnClearSearch" class="layui-btn layui-btn-sm layui-btn-primary">
+                    <i class="layui-icon">&#x1006;</i>清除搜索
+                </button>
+            </div>
+            <div class="demo-side">
+                <table id="demoTreeTb"></table>
+            </div>
+        </div>
+        <script type="text/html" id="barDemo">
+            <button type="button" class="layui-btn layui-btn-radius" lay-event="add">添加</button>
+            <button type="button" class="layui-btn layui-btn-radius" lay-event="del">批量删除</button>
+            <button type="button" class="layui-btn layui-btn-radius" lay-event="show">展开</button>
+            <!--        <a class="layui-btn layui-btn-xs" lay-event="add">添加</a>
+                    <a class="layui-btn layui-btn-xs" lay-event="del">批量删除</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="show">展开</a>-->
+        </script>
+        <!-- 表格操作列 -->
+        <script type="text/html" id="tbBar">
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+
+        <script>
+            layui.config({
+                base: '/layui/lay/modules/'      //自定义layui组件的目录
+            }).extend({ //设定组件别名
+                treeTable:   'treeTable',
+                treeSelect: "treeSelect"
+            });
+            layui.use(['layer','tree', 'treeSelect','util', 'treeTable','form'], function () {
+                var treeSelect = layui.treeSelect;
+                var tree = layui.tree
+                var form = layui.form;
+                form.render();//渲染form
+                var $ = layui.jquery;
+                var layer = layui.layer;
+                var util = layui.util;
+                var treeTable = layui.treeTable;
+                form.render('select');
+                $('body').removeClass('layui-hide');
+//开启节点操作图标
+                treeSelect.render({
+                    // 选择器
+                    elem: '#tree',
+                    // 数据
+                    data: '/menu/treeSelect',
+                    // 异步加载方式：get/post，默认get
+                    type: 'get',
+                    // 占位符
+                    placeholder: '修改默认提示信息',
+                    // 是否开启搜索功能：true/false，默认false
+                    search: true,
+                    // 一些可定制的样式
+                    style: {
+                        folder: {
+                            enable: true
+                        },
+                        line: {
+                            enable: true
                         }
+                    },
+                    // 点击回调
+                    click: function(d){
+                        //console.log(d);
+                        console.log(d.current.name);
+                        $('#parentId').val(d.current.id);
+                        $('#parentName').val(d.current.name);
+                    },
+                    // 加载完成后的回调函数
+                    success: function (d) {
+
+                        treeSelect.refresh('tree');
+                    }
+                });
+                /* $.ajax({
+                     url: "/menu/tree",
+                     type: "GET",
+                     success: function (data) {
+                         console.log(data);
+                         tree.render({
+                             elem: '#test9'
+                             ,data: data
+                             ,click: function(obj){
+                                 layer.msg(JSON.stringify(obj.data));
+                             }
+                         });
+
+                     }
+
+                 });
+         */
+
+                form.on('submit(formDemo)', function(data){
+                    //layer.msg(JSON.stringify(data.field));
+                    $.ajax({
+                        url: "/menu/add",
+                        type: "POST",
+                        data: {
+                            'parentId': data.field.parentId,
+                            'menuName':data.field.menuName,
+                            'menuType':data.field.menuType,
+                            'url':data.field.url,
+                            'visible':data.field.visible,
+                            'orderNum':data.field.orderNum,
+                            'icon':data.field.icon,
+                            'perms':data.field.perms,
+                            'remark':data.field.remark,
+                        },
+                        success: function (msg) {
+                            console.log(msg);
+                            if(msg.code==200){
+                                layer.msg("成功添加");
+                            }else{
+                                layer.msg(msg.msg);
+                            }
+
+                            insTb.refresh();
+                            //location.reload();
+                        }
+
                     });
-                    layer.close(index);
-                    //向服务端发送删除指令
+                    return false;
+                });
+                form.on('submit(formDemoEdit)', function(data){
+                    //layer.msg(JSON.stringify(data.field));
+                    $.ajax({
+                        url: "/menu/edit",
+                        type: "PUT",
+                        data: {
+                            'menuId': data.field.menuId1,
+                            'menuName':data.field.menuName1,
+                            'menuType':data.field.menuType1,
+                            'url':data.field.url1,
+                            'visible':data.field.visible1,
+                            'orderNum':data.field.orderNum1,
+                            'icon':data.field.icon1,
+                            'perms':data.field.perms1,
+                            'remark':data.field.remark1,
+                        },
+                        success: function (msg) {
+                            console.log(msg);
+                            if(msg.code==200){
+                                layer.msg("成功修改");
+                            }else{
+                                layer.msg(msg.msg);
+                            }
+
+                            insTb.refresh();
+                            //location.reload();
+                        }
+
+                    });
+                    return false;
+                });
+                // 渲染表格
+                var insTb = treeTable.render({
+                    elem: '#demoTreeTb',
+                    url: 'menu/select',
+                    toolbar: '#barDemo',
+                    height: 'full-100',
+                    tree: {
+                        iconIndex: 2,
+                        isPidData: true,
+                        idName: 'menuId',
+                        pidName: 'parentId',
+                    },
+                    defaultToolbar: ['filter', 'print', 'exports', {
+                        title: '提示',
+                        layEvent: 'LAYTABLE_TIPS',
+                        icon: 'layui-icon-tips'
+                    }],
+                    cols: [
+                        /* [
+                             {title: '只是想演示一个三级表头', colspan: 9},
+                         ],
+                         [
+                             {title: '只是想演示一个多级表头', colspan: 4},
+                             {field: 'menuUrl', title: '菜单地址', rowspan: 2},
+                             {title: '这是一个二级表头', colspan: 4}
+                         ],*/
+                        [
+                            {type: 'numbers'},
+                            {type: 'checkbox'},
+                            {field: 'menuName', title: '菜单名称', minWidth: 165},
+                            {
+                                title: '菜单图标', align: 'center', hide: false,
+                                templet: '<p><i class="layui-icon {{d.icon}}"></i></p>'
+                            },
+                            {field: 'url', title: '权限url'},
+                            {field: 'perms', title: '权限标识'},
+                            {title: '类型', templet: '<p><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">{{d.menuType=="C"?"菜单":(d.menuType=="M"?"目录":"按钮")}}</button></p>', align: 'center', width: 60},
+                            {title: '可见', templet: '<p> <button type="button" class="layui-btn layui-btn-sm">{{d.visible=="0"?"显示":"隐藏"}}</button></p>', align: 'center', width: 60},
+                            {//{{d.menuType=="C"?"菜单":"按钮"}}
+                                title: '创建时间', templet: function (d) {
+                                    return util.toDateString(d.createTime);
+                                }
+                            },
+                            {
+                                title: '更新时间', templet: function (d) {
+                                    return util.toDateString(d.updateTime);
+                                }
+                            },
+                            {field: 'createBy', title: '创建者'},
+                            {field: 'remark', title: '备注'},
+                            {align: 'center', toolbar: '#tbBar', title: '操作', width: 120}
+                        ]
+                    ],
+                    style: 'margin-top:0;',
+                    done:function(result){
+                        insTb.expandAll();
+                    }
                 });
 
-            } else if (event === 'edit') {
-                layer.msg('修改成功');
-                layer.open({
-                        title: '添加菜单',
-                        /*如果是外部的html，type2，内部，type1*/
-                        type: 1,
-                        btnAlign: 'c',
-                        area: ['500px', '600px'],
-                        content: $("#edit-main").html()
-                        ,success: function(layero, index){
-                            form.render();//渲染form
+                // 工具列点击事件
+                treeTable.on('tool(demoTreeTb)', function (obj) {
+                    var data = obj.data; //获得当前行数据
+                    var event = obj.event;
+                    if (event === 'del') {
 
-                                var div = layero.find('#edit-permission');
-                                div.find("#menuId1").val(data.menuId);
-                                div.find("#menuName1").val(data.menuName);
-                                div.find("#url1").val(data.url);
-                                div.find("#perms1").val(data.perms);
-                                div.find("#icon1").val(data.icon);
-                                div.find("#orderNum1").val(data.orderNum);
-                                div.find("#remark1").val(data.remark);
-                                if (data.visible=="0"){
-                                    div.find("#visible1").attr("checked","checked");
-                                } else {
-                                    div.find("#visible2").attr("checked","checked");
+                        layer.confirm('真的删除行么', function(index){
+                            $.ajax({
+                                url: "/menu/id",
+                                type: "DELETE",
+                                data: {'id': data.menuId},
+                                success: function (msg) {
+                                    if (msg.code == 200) {
+                                        //删除这一行
+                                        obj.del();
+                                        //关闭弹框
+                                        layer.close(index);
+                                        layer.msg("删除成功", {icon: 6});
+                                    } else {
+                                        layer.msg("删除失败"+msg.msg, {icon: 5});
+                                    }
                                 }
-                                console.log(data.menuType)
-                                if(data.menuType=="M"){
-                                    div.find("#menuTypeM1").attr("checked","checked");
-                                }else if(data.menuType=="F"){
-                                    div.find("#menuTypeF1").attr("checked","checked");
-                                }else if(data.menuType=="C"){
-                                    div.find("#menuTypeC1").attr("checked","checked");
-                                }
-                                form.render();
-
-                    }
-                    }
-                );
-                obj.update({authorityName: '新的名称'});
-            }
-        });
-
-        // 头部工具栏点击事件
-        treeTable.on('toolbar(demoTreeTb)', function (obj) {
-            switch (obj.event) {
-                case 'add':
-                    layer.msg('添加');
-                    layer.open({
-                            title: '添加菜单',
-                            /*如果是外部的html，type2，内部，type1*/
-                            type: 1,
-                            btnAlign: 'c',
-                            area: ['500px', '600px'],
-                            content: $("#add-main").html()
-                            ,success: function(layero, index){
-                            form.render();//渲染form
-                                var map=insTb.checkStatus(false).map(function (d) {
-                                    return {
-                                        authorityName: d.menuName,
-                                        authorityId: d.menuId,
-                                        LAY_INDETERMINATE: d.LAY_INDETERMINATE
-                                    };
-                                });
-                                if(map.length==0){
-                                    layer.msg("无选中父项,默认构建一级目录");
-                                    var div = layero.find('#permission');
-                                    div.find("#parentId").val(0);
-                                    div.find("#parentName").val("无选中，默认为一级");
-                                    div.find("#menuTypeM").attr("checked","checked");
-                                    form.render();
-                                }else {
-                                    var div = layero.find('#permission');
-                                    div.find("#parentId").val(map[0].authorityId);
-                                    div.find("#parentName").val(map[0].authorityName);
-                                    div.find("#menuTypeF").attr("checked","checked");
-                                }
-
-
-                            }
-                        }
-                    );
-
-                    break;
-                case 'show':
-                    layer.msg('展开');
-                    insTb.expandAll();
-                    break;
-                case 'del':
-                    layer.msg('批量删除');
-                    var map=insTb.checkStatus(false).map(function (d) {
-                        return {
-
-                            'menuId': d.menuId,
-/*                            'menuName': d.menuName,
-                            'isSelected': d.LAY_INDETERMINATE*/
-                        };
-                    });
-                    var ids="";
-                    map.map(function(el, index) {
-                        if(index==0){
-                            ids=el.menuId;
-                        }else{
-                            ids=ids+","+el.menuId;
-                        }
-                    });
-                    console.log(ids);
-
-                    layer.confirm('真的删除行么', function(index){
-                        $.ajax({
-                            url: "/menu/ids",
-                            type: "DELETE",
-                            data:{'ids':ids},
-                            //data: {'ids': arr},
-                            success: function (msg) {
-                                console.log(map);
-                                if (msg.code == 200) {
-                                    //删除这一行
-                                    obj.del();
-                                    //关闭弹框
-                                    layer.close(index);
-                                    layer.msg("删除成功", {icon: 6});
-                                } else {
-                                    layer.msg("删除失败"+msg.msg, {icon: 5});
-                                }
-                            }
+                            });
+                            layer.close(index);
+                            //向服务端发送删除指令
                         });
-                        layer.close(index);
-                        //向服务端发送删除指令
-                    });
-                    break;
-                case 'LAYTABLE_TIPS':
-                    layer.msg('提示');
-                    break;
-            }
-        });
 
-        // 全部展开
-        $('#btnExpandAll').click(function () {
-            insTb.expandAll();
-        });
+                    } else if (event === 'edit') {
+                        layer.msg('修改成功');
+                        layer.open({
+                                title: '添加菜单',
+                                /*如果是外部的html，type2，内部，type1*/
+                                type: 1,
+                                btnAlign: 'c',
+                                area: ['500px', '600px'],
+                                content: $("#edit-main").html()
+                                ,success: function(layero, index){
 
-        // 全部折叠
-        $('#btnFoldAll').click(function () {
-            insTb.foldAll();
-        });
 
-        // 展开指定
-        $('#btnExpand').click(function () {
-            insTb.expand(2);
-        });
+                                    var div = layero.find('#edit-permission');
+                                    div.find("#menuId1").val(data.menuId);
+                                    div.find("#menuName1").val(data.menuName);
+                                    div.find("#url1").val(data.url);
+                                    div.find("#perms1").val(data.perms);
+                                    div.find("#icon1").val(data.icon);
+                                    div.find("#orderNum1").val(data.orderNum);
+                                    div.find("#remark1").val(data.remark);
+                                    if (data.visible=="0"){
+                                        div.find("#visible1").attr("checked","checked");
+                                    } else {
+                                        div.find("#visible2").attr("checked","checked");
+                                    }
+                                    console.log(data.menuType)
+                                    if(data.menuType=="M"){
+                                        div.find("#menuTypeM1").attr("checked","checked");
+                                    }else if(data.menuType=="F"){
+                                        div.find("#menuTypeF1").attr("checked","checked");
+                                    }else if(data.menuType=="C"){
+                                        div.find("#menuTypeC1").attr("checked","checked");
+                                    }
+                                form.render();//渲染form
 
-        // 折叠指定
-        $('#btnFold').click(function () {
-            insTb.fold(2);
-        });
+                                }
+                            }
+                        );
+                        obj.update({authorityName: '新的名称'});
+                    }
+                });
 
-        // 设置选中
-        $('#btnChecked').click(function () {
-            insTb.expand(4);
-            insTb.setChecked([4]);
-        });
+                // 头部工具栏点击事件
+                treeTable.on('toolbar(demoTreeTb)', function (obj) {
+                    switch (obj.event) {
+                        case 'add':
+                            layer.msg('添加');
+                            layer.open({
+                                    title: '添加菜单',
+                                    /*如果是外部的html，type2，内部，type1*/
+                                    type: 1,
+                                    btnAlign: 'c',
+                                    area: ['500px', '600px'],
+                                    content: $("#add-main")
+                                    ,success: function(layero, index){
+                                        form.render();//渲染form
+                                        var map=insTb.checkStatus(false).map(function (d) {
+                                            return {
+                                                authorityName: d.menuName,
+                                                authorityId: d.menuId,
+                                                LAY_INDETERMINATE: d.LAY_INDETERMINATE
+                                            };
+                                        });
+                                        if(map.length==0){
+                                            layer.msg("无选中父项,默认构建一级目录");
+                                            var div = layero.find('#permission');
+                                            div.find("#parentId").val(0);
+                                            div.find("#parentName").val("无选中，默认为一级");
+                                            div.find("#menuTypeM").attr("checked","checked");
+                                            form.render();
+                                        }else {
+                                            var div = layero.find('#permission');
+                                            div.find("#parentId").val(map[0].authorityId);
+                                            div.find("#parentName").val(map[0].authorityName);
+                                            div.find("#menuTypeF").attr("checked","checked");
+                                        }
+                                        //form.render();
 
-        // 搜索
-        $('#btnSearch').click(function () {
-            var keywords = $('#edtSearch').val();
-            if (keywords) {
-                insTb.filterData(keywords);
-            } else {
-                insTb.clearFilter();
-            }
-        });
+                                    }
+                                }
+                            );
 
-        // 清除搜索
-        $('#btnClearSearch').click(function () {
-            insTb.clearFilter();
-        });
+                            break;
+                        case 'show':
+                            layer.msg('展开');
+                            insTb.expandAll();
+                            break;
+                        case 'del':
+                            layer.msg('批量删除');
+                            var map=insTb.checkStatus(false).map(function (d) {
+                                return {
 
-        // 重载
-        $('#btnReload').click(function () {
-            insTb.reload();
-        });
-        $('#btnRefresh').click(function () {
-            insTb.refresh();
-        });
+                                    'menuId': d.menuId,
+                                    /*                            'menuName': d.menuName,
+                                                                'isSelected': d.LAY_INDETERMINATE*/
+                                };
+                            });
+                            var ids="";
+                            map.map(function(el, index) {
+                                if(index==0){
+                                    ids=el.menuId;
+                                }else{
+                                    ids=ids+","+el.menuId;
+                                }
+                            });
+                            console.log(ids);
 
-        // 获取选中
-        $('#btnGetChecked').click(function () {
-            layer.alert('<pre>' + JSON.stringify(insTb.checkStatus(false).map(function (d) {
-                return {
-                    authorityName: d.menuName,
-                    authorityId: d.menuId,
-                    LAY_INDETERMINATE: d.LAY_INDETERMINATE
-                };
-            }), null, 3) + '</pre>');
-        });
+                            layer.confirm('真的删除行么', function(index){
+                                $.ajax({
+                                    url: "/menu/ids",
+                                    type: "DELETE",
+                                    data:{'ids':ids},
+                                    //data: {'ids': arr},
+                                    success: function (msg) {
+                                        console.log(map);
+                                        if (msg.code == 200) {
+                                            //删除这一行
+                                            //obj.del();
+                                            insTb.refresh();
+                                            //关闭弹框
+                                            layer.close(index);
+                                            layer.msg("删除成功", {icon: 6});
+                                        } else {
+                                            layer.msg("删除失败"+msg.msg, {icon: 5});
+                                        }
+                                    }
+                                });
+                                layer.close(index);
+                                //向服务端发送删除指令
+                            });
+                            break;
+                        case 'LAYTABLE_TIPS':
+                            layer.msg('提示');
+                            break;
+                    }
+                });
 
-/*        // 演示侧边栏
-        $('#btnToggleSide').click(function () {
-            $('.demo-side').toggleClass('show');
-        });*/
+                // 全部展开
+                $('#btnExpandAll').click(function () {
+                    insTb.expandAll();
+                });
 
-    });
-</script>
-</body>
+                // 全部折叠
+                $('#btnFoldAll').click(function () {
+                    insTb.foldAll();
+                });
+
+                // 展开指定
+                $('#btnExpand').click(function () {
+                    insTb.expand(2);
+                });
+
+                // 折叠指定
+                $('#btnFold').click(function () {
+                    insTb.fold(2);
+                });
+
+                // 设置选中
+                $('#btnChecked').click(function () {
+                    insTb.expand(4);
+                    insTb.setChecked([4]);
+                });
+
+                // 搜索
+                $('#btnSearch').click(function () {
+                    var keywords = $('#edtSearch').val();
+                    if (keywords) {
+                        insTb.filterData(keywords);
+                    } else {
+                        insTb.clearFilter();
+                    }
+                });
+
+                // 清除搜索
+                $('#btnClearSearch').click(function () {
+                    insTb.clearFilter();
+                });
+
+                // 重载
+                $('#btnReload').click(function () {
+                    insTb.reload();
+                });
+                $('#btnRefresh').click(function () {
+                    insTb.refresh();
+                });
+
+                // 获取选中
+                $('#btnGetChecked').click(function () {
+                    layer.alert('<pre>' + JSON.stringify(insTb.checkStatus(false).map(function (d) {
+                        return {
+                            authorityName: d.menuName,
+                            authorityId: d.menuId,
+                            LAY_INDETERMINATE: d.LAY_INDETERMINATE
+                        };
+                    }), null, 3) + '</pre>');
+                });
+
+                /*        // 演示侧边栏
+                        $('#btnToggleSide').click(function () {
+                            $('.demo-side').toggleClass('show');
+                        });*/
+
+            });
+        </script>
+    </body>
 </html>

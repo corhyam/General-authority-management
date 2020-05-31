@@ -4,6 +4,7 @@ import com.jier.admin.dao.MenuMapper;
 import com.jier.admin.entity.LayUiTree;
 import com.jier.admin.entity.Menu;
 import com.jier.admin.entity.MenuExample;
+import com.jier.admin.entity.SelectTree;
 import com.jier.admin.util.TreeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.List;
 public interface MenuService {
     public List<LayUiTree> selectAllMenu();
     public List<Menu> selectMenu();
+    public List<SelectTree> selectTreeMenu();
     public boolean addMenu(Menu menu);
     public boolean updateMenu(Menu menu);
     public boolean deleteMenuByIds(List<Integer> ids);

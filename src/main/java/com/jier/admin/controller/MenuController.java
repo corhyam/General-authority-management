@@ -4,10 +4,14 @@ import com.jier.admin.dao.MenuMapper;
 import com.jier.admin.entity.LayUITable;
 import com.jier.admin.entity.LayUiTree;
 import com.jier.admin.entity.Menu;
+import com.jier.admin.entity.SelectTree;
 import com.jier.admin.groupValidation.AddMenu;
 import com.jier.admin.groupValidation.UpdateMenu;
 import com.jier.admin.service.MenuService;
 import com.jier.admin.service.ShiroService;
+import com.jier.admin.util.SelectTreeUtils;
+import com.jier.admin.util.TreeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +34,7 @@ public class MenuController {
     MenuService menuService;
     @Resource
     ShiroService shiroService;
+
     /** 
     * @Description: 树状 
     * @Param:  
@@ -41,6 +46,10 @@ public class MenuController {
     public List<LayUiTree> selectAllMenuTree(){
         List<LayUiTree> menus = menuService.selectAllMenu();
         return menus;
+    }
+    @GetMapping("/treeSelect")
+    public List<SelectTree> selectTreeSelect(){
+       return  menuService.selectTreeMenu();
     }
     /** 
     * @Description: 查询全部菜单 

@@ -1,11 +1,9 @@
 package com.jier.admin.service.impl;
 
 import com.jier.admin.dao.MenuMapper;
-import com.jier.admin.entity.LayUiTree;
-import com.jier.admin.entity.Menu;
-import com.jier.admin.entity.MenuExample;
-import com.jier.admin.entity.User;
+import com.jier.admin.entity.*;
 import com.jier.admin.service.MenuService;
+import com.jier.admin.util.SelectTreeUtils;
 import com.jier.admin.util.TreeUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -51,6 +49,13 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> selectMenu() {
         return menuMapper.selectByExample(null);
+    }
+
+    @Override
+    public List<SelectTree> selectTreeMenu() {
+        List<Menu> menus = menuMapper.selectByExample(null);
+        //并组装成tree格式的
+        return SelectTreeUtils.getChildPerms(menus, 0);
     }
 
     public boolean addMenu(Menu menu){

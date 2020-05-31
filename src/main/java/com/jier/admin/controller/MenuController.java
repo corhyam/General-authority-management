@@ -7,6 +7,7 @@ import com.jier.admin.entity.Menu;
 import com.jier.admin.groupValidation.AddMenu;
 import com.jier.admin.groupValidation.UpdateMenu;
 import com.jier.admin.service.MenuService;
+import com.jier.admin.service.ShiroService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,8 @@ public class MenuController {
 
     @Resource
     MenuService menuService;
+    @Resource
+    ShiroService shiroService;
     /** 
     * @Description: 树状 
     * @Param:  
@@ -62,6 +65,7 @@ public class MenuController {
     public LayUITable addMenu(@Validated({AddMenu.class}) Menu menu){
         boolean isAdded = menuService.addMenu(menu);
         if(isAdded){
+            shiroService.updatePermission();
             return LayUITable.responseData(200,"success");
         }
         return LayUITable.responseData(0,"failure");
@@ -77,6 +81,7 @@ public class MenuController {
     public LayUITable updateMenu(@Validated({UpdateMenu.class}) Menu menu){
         boolean isUpdated = menuService.updateMenu(menu);
         if(isUpdated){
+            shiroService.updatePermission();
             return LayUITable.responseData(200,"success");
         }
         return LayUITable.responseData(0,"failure");
@@ -93,6 +98,7 @@ public class MenuController {
         List<Integer> list = new ArrayList<>(ids);
         boolean isDeleted = menuService.deleteMenuByIds(list);
         if(isDeleted){
+            shiroService.updatePermission();
             return LayUITable.responseData(200,"success");
         }
         return LayUITable.responseData(0,"failure");
@@ -110,6 +116,7 @@ public class MenuController {
         boolean isDeleted = menuService.deleteMenuById(id);
 
         if(isDeleted){
+            shiroService.updatePermission();
             return LayUITable.responseData(200,"success");
         }
         return LayUITable.responseData(0,"failure");

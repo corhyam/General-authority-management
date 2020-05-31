@@ -3,18 +3,17 @@ package com.jier.admin.controller;
 import com.alibaba.fastjson.JSON;
 import com.jier.admin.entity.LayUITable;
 import com.jier.admin.entity.Role;
+import com.jier.admin.entity.User;
 import com.jier.admin.service.RoleService;
 import com.jier.admin.util.MyConstants;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/role")
@@ -38,14 +37,20 @@ public class RoleController {
     }
     @RequestMapping("/saveRole")
     @ResponseBody
-    public Object saveRole(String roleName,String roleKey,Integer roleSort,String status){
+    public Object saveRole(String roleName,String roleKey,Integer roleSort,String status,String remark){
+
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
         Role role=new Role();
         role.setRoleName(roleName);
         role.setRoleKey(roleKey);
         role.setRoleSort(roleSort);
+        role.setRemark(remark);
+        role.setCreateBy(user.getLoginName());
+        role.setCreateTime(new Date());
         if (status==null)
             status = "0";
         role.setStatus(status);
+        user=null;
         int i = roleServiceImpl.insertSelective(role);
         Map map = new LinkedHashMap();
         if(i>0){
@@ -78,4 +83,35 @@ public class RoleController {
         return map;
     }
 
+    @RequestMapping("/editRole")
+    @ResponseBody
+    public Object editRole(int roleId,String roleName,String roleKey,Integer roleSort,String status,String remark){
+
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Role role=new Role();
+        role.setRoleId(roleId);
+        role.setRoleName(roleName);
+        role.setRoleKey(roleKey);
+        role.setRoleSort(roleSort);
+        role.setRemark(remark);
+        role.setUpdateBy(user.getLoginName());
+        role.setUpdateTime(new Date());
+        if (status==null)
+            status = "0";
+        role.setStatus(status);
+        user=null;
+        int i = roleServiceImpl.updateByPrimaryKeySelective(role);
+        Map map = new LinkedHashMap();
+        if(i>0){
+
+            map.put("code", MyConstants.successCode);
+            map.put("message",MyConstants.editSuccessMsg);
+        }else{
+            map.put("code", MyConstants.failCode);
+            map.put("message",MyConstants.editFailMsg);
+        }
+
+        return map;
+
+    }
 }

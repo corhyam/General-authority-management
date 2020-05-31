@@ -23,5 +23,9 @@ public class PageController {
     public String menu2(){
         return "/menu/menu";
     }
+    @GetMapping("/show")
+    public String show(){
+        return "/show";
+    }
 
 }

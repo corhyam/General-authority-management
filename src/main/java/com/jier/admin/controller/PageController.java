@@ -27,5 +27,13 @@ public class PageController {
     public String show(){
         return "show";
     }
+/*    @GetMapping("/tree")
+    public String tree(){
+        return "menu/tree";
+    }
+    @GetMapping("/menu1")
+    public String menu1(){
+        return "menu/menu1";
+    }*/
 
 }

@@ -58,10 +58,7 @@ public class UserController {
     @RequestMapping("/edit")
     @ResponseBody
     public Object editUser(User user){
-        User user1 = new User();
         System.out.println(user);
-        user1.setUserName("xiaopag");
-        user1.setUserId(5);
         int i = userServiceImpl.updateByPrimaryKeySelective(user);
         Map map= new HashMap<>();
         if(i>0){

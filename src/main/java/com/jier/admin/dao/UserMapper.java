@@ -33,5 +33,5 @@ public interface UserMapper {
 
     User selectUserByUsername(String username);
 
-    int delUserByID(List<String> ids);
+    int delUserByID(@Param("ids") List<String> ids);
 }

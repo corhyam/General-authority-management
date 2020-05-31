@@ -52,18 +52,18 @@
 </form>
 
 <form class="layui-form" action="" id="userEditForm" style="display: none">
-    <input type="hidden" id="userid" name="userid">
+    <input type="hidden" id="userid" name="userId">
     <div class="layui-form-item" style="margin-top: 20px">
         <label class="layui-form-label">登陆名</label>
         <div class="layui-input-block">
-            <input type="text" id="loginname" name="loginname" required lay-verify="required" placeholder="请输入登陆名"
+            <input type="text" id="loginName" name="loginName" required lay-verify="required" placeholder="请输入登陆名"
                    autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">真实性名</label>
         <div class="layui-input-block">
-            <input type="text" id="username" name="username" required lay-verify="required" placeholder="请输入真实姓名"
+            <input type="text" id="userName" name="userName" required lay-verify="required" placeholder="请输入真实姓名"
                    autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -82,9 +82,23 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="number" name="status" required lay-verify="required"
+                   placeholder="请输入0正常/1异常" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">修改人</label>
         <div class="layui-input-block">
-            <input type="text" id="createby" name="createby" required lay-verify="required" placeholder="请输入修改人"
+            <input type="text" id="updateBy" name="updateBy" required lay-verify="required" placeholder="请输入修改人"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <input type="text" id="remark" name="remark" required lay-verify="required" placeholder="请输入备注信息"
                    autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -95,7 +109,6 @@
             <button type="reset" class="layui-btn layui-btn-warm">重置</button>
         </div>
     </div>
-
 </form>
 </body>
 <script>
@@ -119,20 +132,15 @@
                 {
                     field: 'userId',
                     title: '用户编号',
-                    width: 80,
-                    sort: true,
-                    fixed: 'left',
-                    checkbox: true
+                    width: 100
                 }, {
                 field: 'loginName',
                 title: '登录名',
-                width: 80,
-                sort: true,
-                fixed: 'left'
+                width: 100
             }, {
                 field: 'userName',
                 title: '真实姓名',
-                width: 80
+                width: 100
             }, {
                 field: 'email',
                 title: '邮箱',
@@ -144,30 +152,23 @@
             }, {
                 field: 'status',
                 title: '状态',
-                width: 50
+                templet: '<p><button type="button" id="zt" class="layui-btn layui-btn-sm layui-btn-normal">{{d.status==0?"正常":"异常"}}</button></p>',
+                width: 80
             }, {
                 field: 'createBy',
                 title: '创建人',
                 width: 80
-            }, {
-                field: 'createTime',
-                title: '创建时间',
-                width: 200
-            }, {
+            },  {
                 field: 'updateBy',
                 title: '修改人',
                 width: 80
             }, {
-                field: 'updateTime',
-                title: '修改时间',
-                width: 200
-            }, {
                 field: 'remark',
                 title: '备注',
-                width: 150
+                width: 200
             }, {
                 title: '操作',
-                width: 150,
+                width: 120,
                 toolbar: '#barDemo'
             }
             ]
@@ -273,7 +274,6 @@
         return false;
     });
 
-
     form.on('submit(editUserForm)', function (data) {
         //数据的提交，ajax方式
         console.log(data.field)
@@ -356,6 +356,7 @@
             })
         }
     });
+
 </script>
 
 </html>

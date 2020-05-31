@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService{
             //结束分页,pageInfo封装了分页之后所有数据
             PageInfo<User> pageInfo = new PageInfo(myUserInfos);
             return pageInfo;
-
         }
 
 /*        @Override
@@ -65,8 +64,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-        public int updateByPrimaryKeySelective(User record) {
-            return userMapper.updateByPrimaryKeySelective(record);
-        }
+    public int updateByPrimaryKeySelective(User record) {
+        return userMapper.updateByPrimaryKeySelective(record);
+    }
 
 }

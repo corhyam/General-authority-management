@@ -173,6 +173,9 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <select id="selectAllDept" resultMap="BaseResultMap">
+      select * from tbl_dept
+  </select>
   <update id="updateByExampleSelective" parameterType="map">
     update tbl_dept
     <set>

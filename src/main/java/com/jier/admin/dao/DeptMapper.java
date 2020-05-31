@@ -3,8 +3,13 @@ package com.jier.admin.dao;
 import com.jier.admin.entity.Dept;
 import com.jier.admin.entity.DeptExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+@Mapper
+@Repository
 public interface DeptMapper {
     long countByExample(DeptExample example);
 
@@ -27,4 +32,6 @@ public interface DeptMapper {
     int updateByPrimaryKeySelective(Dept record);
 
     int updateByPrimaryKey(Dept record);
+
+    List<Dept> selectAllDept();
 }

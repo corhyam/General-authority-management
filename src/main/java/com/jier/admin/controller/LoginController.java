@@ -1,5 +1,6 @@
 package com.jier.admin.controller;
 
+import com.jier.admin.entity.LayUITable;
 import com.jier.admin.entity.LayUiTree;
 import com.jier.admin.service.MenuService;
 import org.apache.shiro.SecurityUtils;
@@ -10,6 +11,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -62,5 +64,11 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return "login";
+    }
+    @RequestMapping("/unAuthorized")
+    @ResponseBody
+    public LayUITable unAuth(){
+
+        return LayUITable.responseData(403,"您没有权限");
     }
 }

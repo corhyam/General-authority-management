@@ -4,8 +4,11 @@ import com.jier.admin.dao.MenuMapper;
 import com.jier.admin.entity.LayUiTree;
 import com.jier.admin.entity.Menu;
 import com.jier.admin.entity.MenuExample;
+import com.jier.admin.entity.User;
 import com.jier.admin.service.MenuService;
 import com.jier.admin.util.TreeUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +40,7 @@ public class MenuServiceImpl implements MenuService {
      * 查询所有的菜单，并组装成tree格式的
      * @return
      */
+    @Override
     public List<LayUiTree> selectAllMenu() {
         //查询所有的菜单
         List<Menu> menus = menuMapper.selectByExample(null);
@@ -51,8 +55,13 @@ public class MenuServiceImpl implements MenuService {
 
     public boolean addMenu(Menu menu){
         menu.setCreateTime(new Date());
-        menu.setCreateBy("admin");
-        menu.setUpdateBy("admin");
+        Subject subject = SecurityUtils.getSubject();
+        if(subject==null){
+            throw new RuntimeException("未能获取当前用户，未登录");
+        }
+        User user=(User) subject.getPrincipal();
+        menu.setCreateBy(user.getLoginName());
+        menu.setUpdateBy(user.getLoginName());
         menu.setUpdateTime(new Date());
         int i=menuMapper.insert(menu);
         if(i!=1){
@@ -61,6 +70,12 @@ public class MenuServiceImpl implements MenuService {
         return true;
     }
     public boolean updateMenu(Menu menu){
+        Subject subject = SecurityUtils.getSubject();
+        if(subject==null){
+            throw new RuntimeException("未能获取当前用户，未登录");
+        }
+        User user=(User) subject.getPrincipal();
+        menu.setUpdateBy(user.getLoginName());
         menu.setUpdateTime(new Date());
         int i=menuMapper.updateByPrimaryKeySelective(menu);
         if(i!=1){
@@ -81,7 +96,7 @@ public class MenuServiceImpl implements MenuService {
         }
         return true;
     }
-
+    @Override
     public boolean deleteMenuById(Integer id){
         MenuExample menuExample=new MenuExample();
         MenuExample.Criteria criteria = menuExample.createCriteria();

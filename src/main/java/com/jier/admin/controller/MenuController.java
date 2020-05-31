@@ -58,7 +58,7 @@ public class MenuController {
     * @Author: Mr.liu
     * @Date: 2020/5/29 
     */
-    @PostMapping("")
+    @PostMapping("/add")
     public LayUITable addMenu(@Validated({AddMenu.class}) Menu menu){
         boolean isAdded = menuService.addMenu(menu);
         if(isAdded){
@@ -73,7 +73,7 @@ public class MenuController {
     * @Author: Mr.liu
     * @Date: 2020/5/29
     */
-    @PutMapping("")
+    @PutMapping("/edit")
     public LayUITable updateMenu(@Validated({UpdateMenu.class}) Menu menu){
         boolean isUpdated = menuService.updateMenu(menu);
         if(isUpdated){
@@ -104,7 +104,7 @@ public class MenuController {
     * @Author: Mr.liu
     * @Date: 2020/5/29
     */
-    @DeleteMapping()
+    @DeleteMapping("/id")
     public LayUITable delMenu(@RequestParam Integer id){
 
         boolean isDeleted = menuService.deleteMenuById(id);

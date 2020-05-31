@@ -248,7 +248,7 @@
         form.on('submit(formDemo)', function(data){
             //layer.msg(JSON.stringify(data.field));
             $.ajax({
-                url: "/menu",
+                url: "/menu/add",
                 type: "POST",
                 data: {
                     'parentId': data.field.parentId,
@@ -279,7 +279,7 @@
         form.on('submit(formDemoEdit)', function(data){
             //layer.msg(JSON.stringify(data.field));
             $.ajax({
-                url: "/menu",
+                url: "/menu/edit",
                 type: "PUT",
                 data: {
                     'menuId': data.field.menuId1,
@@ -374,7 +374,7 @@
 
                 layer.confirm('真的删除行么', function(index){
                     $.ajax({
-                        url: "/menu",
+                        url: "/menu/id",
                         type: "DELETE",
                         data: {'id': data.menuId},
                         success: function (msg) {
@@ -385,7 +385,7 @@
                                 layer.close(index);
                                 layer.msg("删除成功", {icon: 6});
                             } else {
-                                layer.msg("删除失败", {icon: 5});
+                                layer.msg("删除失败"+msg.msg, {icon: 5});
                             }
                         }
                     });
@@ -515,7 +515,7 @@
                                     layer.close(index);
                                     layer.msg("删除成功", {icon: 6});
                                 } else {
-                                    layer.msg("删除失败", {icon: 5});
+                                    layer.msg("删除失败"+msg.msg, {icon: 5});
                                 }
                             }
                         });

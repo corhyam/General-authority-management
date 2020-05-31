@@ -23,17 +23,5 @@ public class PageController {
     public String menu2(){
         return "/menu/menu";
     }
-    @GetMapping("/menuTree")
-    public String menuTree(){
-        return "/menu/showMenuTree";
-    }
 
-    @GetMapping("/showMenuTree2")
-    public String menuTree2(){
-        return "/menu/showMenuTree2";
-    }
-    @GetMapping("/showMenu")
-    public String menushow(){
-        return "/menu/showMenu";
-    }
 }

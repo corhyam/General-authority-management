@@ -101,13 +101,15 @@
                 {field: 'roleId', title: '角色编号', width:80, sort: true, fixed: 'left',checkbox: true}
                 ,{field: 'roleName', title: '角色名称', width:120, sort: true, fixed: 'left'}
                 ,{field: 'roleKey', title: '权限字符', width:120}
-                ,{field: 'roleSort', title: '显示顺序',sort: true, width:180}
+                ,{field: 'roleSort', title: '显示顺序',sort: true, width:120}
                 ,{field: 'status', title: '状态',
                 templet: '<p><button type="button" id="zt" class="layui-btn layui-btn-sm layui-btn-normal">{{d.status==0?"正常":"异常"}}</button></p>',width:80}
                 ,{field: 'remark', title: '备注信息', width:200}
-                ,{field: 'createTime', title: '创建时间', width:200}
-                ,{field: 'updateTime', title: '修改时间', width:200}
-                ,{ title: '操作', width:200, toolbar: '#barDemo'}
+                ,{field: 'createTime', title: '创建时间', sort: true, width:180}
+                ,{field: 'createBy', title: '创建人', width:110}
+                ,{field: 'updateTime', title: '修改时间', sort: true, width:180}
+                ,{field: 'updateBy', title: '修改人', width:110}
+                ,{ title: '操作', width:100, toolbar: '#barDemo'}
             ]]
     });
     //监听头工具栏事件
